@@ -1,0 +1,21 @@
+package users_service
+
+import (
+	"context"
+
+	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
+)
+
+type service struct {
+	usersRepository UsersRepository
+}
+
+type UsersRepository interface {
+	CreateUser(ctx context.Context, user domain.User) (domain.User, error)
+}
+
+func NewService(usersRepository UsersRepository) *service {
+	return &service{
+		usersRepository: usersRepository,
+	}
+}
