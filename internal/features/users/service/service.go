@@ -12,6 +12,7 @@ type service struct {
 
 type UsersRepository interface {
 	CreateUser(ctx context.Context, user domain.User) (domain.User, error)
+	GetUsers(ctx context.Context, limit *int, offset *int) ([]domain.User, error)
 }
 
 func NewService(usersRepository UsersRepository) *service {
