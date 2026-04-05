@@ -22,7 +22,7 @@ func (r *repository) GetUsers(ctx context.Context, limit *int, offset *int) ([]d
 
 	rows, err := r.pool.Query(ctx, query, limit, offset)
 	if err != nil {
-		return nil, fmt.Errorf("select users: %w", err)
+		return nil, fmt.Errorf("query: %w", err)
 	}
 
 	userModels, err := pgx.CollectRows(rows, pgx.RowToStructByPos[UserModel])
