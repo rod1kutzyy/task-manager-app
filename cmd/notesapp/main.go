@@ -22,7 +22,7 @@ func main() {
 
 	logger, err := logger.NewLogger(logger.NewConfigMust())
 	if err != nil {
-		log.Fatal("failed to init app logger: %w", err)
+		log.Fatalf("failed to init app logger: %v", err)
 	}
 	defer logger.Close()
 

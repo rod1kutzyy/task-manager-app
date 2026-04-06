@@ -28,7 +28,7 @@ func FromContext(ctx context.Context) *Logger {
 func NewLogger(config Config) (*Logger, error) {
 	zapLvl := zap.NewAtomicLevel()
 	if err := zapLvl.UnmarshalText([]byte(config.Level)); err != nil {
-		return nil, fmt.Errorf("unmarshal log lever: %w", err)
+		return nil, fmt.Errorf("unmarshal log level: %w", err)
 	}
 
 	if err := os.MkdirAll(config.Folder, 0755); err != nil {
@@ -61,9 +61,9 @@ func NewLogger(config Config) (*Logger, error) {
 	}, nil
 }
 
-func (l *Logger) With(filed ...zap.Field) *Logger {
+func (l *Logger) With(field ...zap.Field) *Logger {
 	return &Logger{
-		Logger: l.Logger.With(filed...),
+		Logger: l.Logger.With(field...),
 		file:   l.file,
 	}
 }
