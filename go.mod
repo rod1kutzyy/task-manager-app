@@ -1,6 +1,6 @@
 module github.com/rod1kutzyy/task-manager-app
 
-go 1.26.0
+go 1.26.2
 
 require (
 	github.com/go-playground/validator/v10 v10.30.2
