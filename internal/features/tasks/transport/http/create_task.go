@@ -2,7 +2,6 @@ package tasks_transport_http
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
@@ -16,16 +15,7 @@ type createTaskRequest struct {
 	AuthorUserID int     `json:"author_user_id" validate:"required"`
 }
 
-type createTaskResponse struct {
-	ID           int        `json:"id"`
-	Version      int        `json:"version"`
-	Title        string     `json:"title"`
-	Description  *string    `json:"description"`
-	Completed    bool       `json:"completed"`
-	CreatedAt    time.Time  `json:"created_at"`
-	CompletedAt  *time.Time `json:"completed_at"`
-	AuthorUserID int        `json:"author_user_id"`
-}
+type createTaskResponse taskDTOResponse
 
 func (h *handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
@@ -46,20 +36,7 @@ func (h *handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := taskDTOFromDomain(taskDomain)
+	resp := createTaskResponse(taskDTOFromDomain(taskDomain))
 
 	respHandler.JSONResponse(resp, http.StatusCreated)
-}
-
-func taskDTOFromDomain(task domain.Task) createTaskResponse {
-	return createTaskResponse{
-		ID:           task.ID,
-		Version:      task.Version,
-		Title:        task.Title,
-		Description:  task.Description,
-		Completed:    task.Completed,
-		CreatedAt:    task.CreatedAt,
-		CompletedAt:  task.CompletedAt,
-		AuthorUserID: task.AuthorUserID,
-	}
 }
