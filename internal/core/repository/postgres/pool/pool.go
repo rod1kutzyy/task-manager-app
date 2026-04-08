@@ -2,58 +2,29 @@ package core_postgres_pool
 
 import (
 	"context"
-	"fmt"
 	"time"
-
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Pool interface {
-	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
-	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
-	Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
+	Query(ctx context.Context, sql string, args ...any) (Rows, error)
+	QueryRow(ctx context.Context, sql string, args ...any) Row
+	Exec(ctx context.Context, sql string, arguments ...any) (CommandTag, error)
 	Close()
 
 	OperationTimeout() time.Duration
 }
 
-type ConnectionPool struct {
-	*pgxpool.Pool
-	operationTimeout time.Duration
+type Rows interface {
+	Next() bool
+	Scan(dest ...any) error
+	Err() error
+	Close()
 }
 
-func NewConnectionPool(ctx context.Context, config Config) (*ConnectionPool, error) {
-	connString := fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		config.User,
-		config.Password,
-		config.Host,
-		config.Port,
-		config.Database,
-	)
-
-	pgxconfig, err := pgxpool.ParseConfig(connString)
-	if err != nil {
-		return nil, fmt.Errorf("parse pgxconfig: %w", err)
-	}
-
-	pool, err := pgxpool.NewWithConfig(ctx, pgxconfig)
-	if err != nil {
-		return nil, fmt.Errorf("create pgxpool: %w", err)
-	}
-
-	if err := pool.Ping(ctx); err != nil {
-		return nil, fmt.Errorf("pgxpool ping: %w", err)
-	}
-
-	return &ConnectionPool{
-		Pool:             pool,
-		operationTimeout: config.Timeout,
-	}, nil
+type Row interface {
+	Scan(dest ...any) error
 }
 
-func (p *ConnectionPool) OperationTimeout() time.Duration {
-	return p.operationTimeout
+type CommandTag interface {
+	RowsAffected() int64
 }

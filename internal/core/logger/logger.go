@@ -1,4 +1,4 @@
-package logger
+package core_logger
 
 import (
 	"context"
@@ -16,13 +16,21 @@ type Logger struct {
 	file *os.File
 }
 
+type contextKey struct{}
+
+var loggerContextKey = contextKey{}
+
 func FromContext(ctx context.Context) *Logger {
-	logger, ok := ctx.Value("log").(*Logger)
+	logger, ok := ctx.Value(loggerContextKey).(*Logger)
 	if !ok {
 		panic("no logger in context")
 	}
 
 	return logger
+}
+
+func ToContext(ctx context.Context, logger *Logger) context.Context {
+	return context.WithValue(ctx, loggerContextKey, logger)
 }
 
 func NewLogger(config Config) (*Logger, error) {

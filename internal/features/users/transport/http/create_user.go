@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
-	"github.com/rod1kutzyy/task-manager-app/internal/core/logger"
+	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/request"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/response"
 )
@@ -17,12 +17,12 @@ type createUserResponse userDTOResponse
 
 func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	logger := logger.FromContext(ctx)
-	responseHandler := response.NewHTTPResponseHandler(logger, w)
+	logger := core_logger.FromContext(ctx)
+	respHandler := response.NewHTTPResponseHandler(w, logger)
 
 	var req createUserRequest
 	if err := request.DecodeAndValidateRequest(r, &req); err != nil {
-		responseHandler.ErrorResponse(err, "failed to decode and validate HTTP request")
+		respHandler.ErrorResponse(err, "failed to decode and validate HTTP request")
 		return
 	}
 
@@ -30,13 +30,13 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	userDomain, err := h.usersService.CreateUser(ctx, userDomain)
 	if err != nil {
-		responseHandler.ErrorResponse(err, "failed to create user")
+		respHandler.ErrorResponse(err, "failed to create user")
 		return
 	}
 
 	resp := createUserResponse(userDTOFromDomain(userDomain))
 
-	responseHandler.JSONResponse(resp, http.StatusCreated)
+	respHandler.JSONResponse(resp, http.StatusCreated)
 }
 
 func domainFromDTO(dto createUserRequest) domain.User {

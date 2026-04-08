@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 )
 
@@ -18,14 +17,17 @@ func (r *repository) CreateUser(ctx context.Context, user domain.User) (domain.U
 	RETURNING id, version, full_name, phone_number;
 	`
 
-	rows, err := r.pool.Query(ctx, query, user.FullName, user.PhoneNumber)
-	if err != nil {
-		return domain.User{}, fmt.Errorf("query: %w", err)
-	}
+	row := r.pool.QueryRow(ctx, query, user.FullName, user.PhoneNumber)
 
-	userModel, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[UserModel])
+	var userModel UserModel
+	err := row.Scan(
+		&userModel.ID,
+		&userModel.Version,
+		&userModel.FullName,
+		&userModel.PhoneNumber,
+	)
 	if err != nil {
-		return domain.User{}, fmt.Errorf("collect user row: %w", err)
+		return domain.User{}, fmt.Errorf("scan user: %w", err)
 	}
 
 	userDomain := domain.NewUser(

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/rod1kutzyy/task-manager-app/internal/core/logger"
+	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/middleware"
 	"go.uber.org/zap"
 )
@@ -14,11 +14,11 @@ import (
 type HTTPServer struct {
 	mux         *http.ServeMux
 	config      Config
-	logger      *logger.Logger
+	logger      *core_logger.Logger
 	middlewares []middleware.Middleware
 }
 
-func NewHTTPServer(config Config, logger *logger.Logger, middlewares ...middleware.Middleware) *HTTPServer {
+func NewHTTPServer(config Config, logger *core_logger.Logger, middlewares ...middleware.Middleware) *HTTPServer {
 	return &HTTPServer{
 		mux:         http.NewServeMux(),
 		config:      config,
@@ -31,7 +31,7 @@ func (s *HTTPServer) RegisterAPIRouters(routers ...*APIVersionRouter) {
 	for _, router := range routers {
 		prefix := "/api/" + string(router.apiVersion)
 
-		s.mux.Handle(prefix+"/", http.StripPrefix(prefix, router))
+		s.mux.Handle(prefix+"/", http.StripPrefix(prefix, router.WithMiddlewares()))
 	}
 }
 

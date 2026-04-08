@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
+	core_postgres_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool"
 )
 
 func (r *repository) GetUser(ctx context.Context, id int) (domain.User, error) {
@@ -20,21 +20,23 @@ func (r *repository) GetUser(ctx context.Context, id int) (domain.User, error) {
 	WHERE id = $1;
 	`
 
-	rows, err := r.pool.Query(ctx, query, id)
-	if err != nil {
-		return domain.User{}, fmt.Errorf("query: %w", err)
-	}
+	row := r.pool.QueryRow(ctx, query, id)
 
-	userModel, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[UserModel])
+	var userModel UserModel
+	err := row.Scan(
+		&userModel.ID,
+		&userModel.Version,
+		&userModel.FullName,
+		&userModel.PhoneNumber,
+	)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
+		if errors.Is(err, core_postgres_pool.ErrNoRows) {
 			return domain.User{}, fmt.Errorf(
 				"user with id='%d': %w",
 				id, core_errors.ErrNotFound,
 			)
 		}
-
-		return domain.User{}, fmt.Errorf("collect user row: %w", err)
+		return domain.User{}, fmt.Errorf("scan user: %w", err)
 	}
 
 	userDomain := domain.NewUser(

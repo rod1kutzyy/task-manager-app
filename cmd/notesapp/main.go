@@ -6,8 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/rod1kutzyy/task-manager-app/internal/core/logger"
-	core_postgres_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool"
+	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
+	core_pgx_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool/pgx"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/middleware"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/server"
 	users_postgres_repository "github.com/rod1kutzyy/task-manager-app/internal/features/users/repository/postgres"
@@ -20,14 +20,14 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 
-	logger, err := logger.NewLogger(logger.NewConfigMust())
+	logger, err := core_logger.NewLogger(core_logger.NewConfigMust())
 	if err != nil {
 		log.Fatalf("failed to init app logger: %v", err)
 	}
 	defer logger.Close()
 
 	logger.Debug("initializing postgres connection pool")
-	pool, err := core_postgres_pool.NewConnectionPool(ctx, core_postgres_pool.NewConfigMust())
+	pool, err := core_pgx_pool.NewPool(ctx, core_pgx_pool.NewConfigMust())
 	if err != nil {
 		logger.Fatal("failed to init postgres connection pool", zap.Error(err))
 	}
@@ -44,8 +44,8 @@ func main() {
 		logger,
 		middleware.RequestID(),
 		middleware.Logger(logger),
-		middleware.Recovery(),
 		middleware.Trace(),
+		middleware.Recovery(),
 	)
 
 	apiVersionRouter := server.NewAPIVersionRouter(server.ApiVersion1)

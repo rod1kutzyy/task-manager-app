@@ -14,7 +14,7 @@ env-cleanup:
 	@read -p "Clear all volume files of the environment? The risk of data loss. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
 		docker compose down notesapp-postgres port-forwarder && \
-		rm -rf out/pgdata && \
+		rm -rf ${PROJECT_ROOT}/out/pgdata && \
 		echo "The environment files are cleared"; \
 	else \
 		echo "Environment cleanup has been canceled"; \
@@ -58,4 +58,4 @@ app-run:
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
 		export POSTGRES_HOST=localhost && \
 		go mod tidy && \
-		go run cmd/notesapp/main.go
+		go run ${PROJECT_ROOT}/cmd/notesapp/main.go

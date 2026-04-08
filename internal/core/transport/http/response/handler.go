@@ -7,19 +7,19 @@ import (
 	"net/http"
 
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
-	"github.com/rod1kutzyy/task-manager-app/internal/core/logger"
+	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
 	"go.uber.org/zap"
 )
 
 type HTTPResponseHandler struct {
-	logger *logger.Logger
 	w      http.ResponseWriter
+	logger *core_logger.Logger
 }
 
-func NewHTTPResponseHandler(logger *logger.Logger, w http.ResponseWriter) *HTTPResponseHandler {
+func NewHTTPResponseHandler(w http.ResponseWriter, logger *core_logger.Logger) *HTTPResponseHandler {
 	return &HTTPResponseHandler{
-		logger: logger,
 		w:      w,
+		logger: logger,
 	}
 }
 

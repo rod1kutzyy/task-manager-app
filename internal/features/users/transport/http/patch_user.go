@@ -6,11 +6,10 @@ import (
 	"strings"
 
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
-	"github.com/rod1kutzyy/task-manager-app/internal/core/logger"
+	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/request"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/response"
 	http_types "github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/types"
-	http_utils "github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/utils"
 )
 
 type patchUserRequest struct {
@@ -50,18 +49,18 @@ type patchUserResponse userDTOResponse
 
 func (h *handler) PatchUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	logger := logger.FromContext(ctx)
-	responseHandler := response.NewHTTPResponseHandler(logger, w)
+	logger := core_logger.FromContext(ctx)
+	respHandler := response.NewHTTPResponseHandler(w, logger)
 
-	userID, err := http_utils.GetIntPathValue(r, "id")
+	userID, err := request.GetIntPathValue(r, "id")
 	if err != nil {
-		responseHandler.ErrorResponse(err, "failed to get userID path value")
+		respHandler.ErrorResponse(err, "failed to get userID path value")
 		return
 	}
 
 	var req patchUserRequest
 	if err := request.DecodeAndValidateRequest(r, &req); err != nil {
-		responseHandler.ErrorResponse(err, "failed to decode and validate HTTP request")
+		respHandler.ErrorResponse(err, "failed to decode and validate HTTP request")
 		return
 	}
 
@@ -69,18 +68,18 @@ func (h *handler) PatchUser(w http.ResponseWriter, r *http.Request) {
 
 	userDomain, err := h.usersService.PatchUser(ctx, userID, userPatch)
 	if err != nil {
-		responseHandler.ErrorResponse(err, "failed to patch user")
+		respHandler.ErrorResponse(err, "failed to patch user")
 		return
 	}
 
 	resp := patchUserResponse(userDTOFromDomain(userDomain))
 
-	responseHandler.JSONResponse(resp, http.StatusOK)
+	respHandler.JSONResponse(resp, http.StatusOK)
 }
 
 func userPatchFromRequest(req patchUserRequest) domain.UserPatch {
-	return domain.UserPatch{
-		FullName:    req.FullName.ToDomain(),
-		PhoneNumber: req.PhoneNumber.ToDomain(),
-	}
+	return domain.NewUserPatch(
+		req.FullName.ToDomain(),
+		req.PhoneNumber.ToDomain(),
+	)
 }

@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
+	core_postgres_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool"
 )
 
 func (r *repository) PatchUser(ctx context.Context, id int, user domain.User) (domain.User, error) {
@@ -24,21 +24,23 @@ func (r *repository) PatchUser(ctx context.Context, id int, user domain.User) (d
 	RETURNING id, version, full_name, phone_number;
 	`
 
-	rows, err := r.pool.Query(ctx, query, user.FullName, user.PhoneNumber, id, user.Version)
-	if err != nil {
-		return domain.User{}, fmt.Errorf("query: %w", err)
-	}
+	row := r.pool.QueryRow(ctx, query, user.FullName, user.PhoneNumber, id, user.Version)
 
-	userModel, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[UserModel])
+	var userModel UserModel
+	err := row.Scan(
+		&userModel.ID,
+		&userModel.Version,
+		&userModel.FullName,
+		&userModel.PhoneNumber,
+	)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
+		if errors.Is(err, core_postgres_pool.ErrNoRows) {
 			return domain.User{}, fmt.Errorf(
 				"user with id='%d' concurrently accessed: %w",
 				id, core_errors.ErrConflict,
 			)
 		}
-
-		return domain.User{}, fmt.Errorf("collect user row: %w", err)
+		return domain.User{}, fmt.Errorf("scan user: %w", err)
 	}
 
 	userDomain := domain.NewUser(
