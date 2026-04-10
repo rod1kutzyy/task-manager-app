@@ -54,6 +54,15 @@ migrate-action:
 		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@notesapp-postgres:5432/${POSTGRES_DB}?sslmode=disable \
 		"$(action)"
 
+logs-cleanup:
+	@read -p "Clear all log files? The risk of logs loss. [y/N]: " ans; \
+	if [ "$$ans" = "y" ]; then \
+		rm -rf ${PROJECT_ROOT}/out/logs && \
+		echo "The log files are cleared"; \
+	else \
+		echo "Log files cleanup has been canceled"; \
+	fi
+
 app-run:
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
 		export POSTGRES_HOST=localhost && \

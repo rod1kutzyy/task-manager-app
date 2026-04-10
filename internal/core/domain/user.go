@@ -8,8 +8,9 @@ import (
 )
 
 type User struct {
-	ID          int
-	Version     int
+	ID      int
+	Version int
+
 	FullName    string
 	PhoneNumber *string
 }
