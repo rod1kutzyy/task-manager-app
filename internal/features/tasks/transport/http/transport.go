@@ -52,7 +52,7 @@ func (h *handler) Routes() []server.Route {
 		{
 			Method:  http.MethodPatch,
 			Path:    "/tasks/{id}",
-			Handler: h.Patchtask,
+			Handler: h.PatchTask,
 		},
 	}
 }
