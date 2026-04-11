@@ -12,6 +12,9 @@ import (
 	core_pgx_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool/pgx"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/middleware"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/server"
+	statistics_postgres_repository "github.com/rod1kutzyy/task-manager-app/internal/features/statistics/repository/postgres"
+	statistics_service "github.com/rod1kutzyy/task-manager-app/internal/features/statistics/service"
+	statistics_transport_http "github.com/rod1kutzyy/task-manager-app/internal/features/statistics/transport/http"
 	tasks_postgres_repository "github.com/rod1kutzyy/task-manager-app/internal/features/tasks/repository/postgres"
 	tasks_service "github.com/rod1kutzyy/task-manager-app/internal/features/tasks/service"
 	tasks_transport_http "github.com/rod1kutzyy/task-manager-app/internal/features/tasks/transport/http"
@@ -54,6 +57,11 @@ func main() {
 	tasksService := tasks_service.NewService(tasksRepository)
 	tasksTransportHTTP := tasks_transport_http.NewHandler(tasksService)
 
+	logger.Debug("initializing feature", zap.String("feature", "statistics"))
+	statisticsRepository := statistics_postgres_repository.NewRepository(pool)
+	statisticsService := statistics_service.NewService(statisticsRepository)
+	statisticsTransportHTTP := statistics_transport_http.NewHandler(statisticsService)
+
 	logger.Debug("initializing HTTP server")
 	httpServer := server.NewHTTPServer(
 		server.NewConfigMust(),
@@ -65,8 +73,11 @@ func main() {
 	)
 
 	apiVersionRouter := server.NewAPIVersionRouter(server.ApiVersion1)
+
 	apiVersionRouter.RegisterRoutes(usersTransportHTTP.Routes()...)
 	apiVersionRouter.RegisterRoutes(tasksTransportHTTP.Routes()...)
+	apiVersionRouter.RegisterRoutes(statisticsTransportHTTP.Routes()...)
+
 	httpServer.RegisterAPIRouters(apiVersionRouter)
 
 	if err := httpServer.Run(ctx); err != nil {

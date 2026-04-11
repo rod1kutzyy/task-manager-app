@@ -49,7 +49,7 @@ func (r *patchTaskRequest) Validate() error {
 
 type patchTaskResponse taskDTOResponse
 
-func (h *handler) Patchtask(w http.ResponseWriter, r *http.Request) {
+func (h *handler) PatchTask(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger := core_logger.FromContext(ctx)
 	respHandler := response.NewHTTPResponseHandler(w, logger)
