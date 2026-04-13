@@ -72,5 +72,8 @@ app-run:
 app-deploy:
 	@docker compose up -d --build notesapp
 
+app-undeploy:
+	@docker compose down notesapp
+
 ps:
 	@docker compose ps
