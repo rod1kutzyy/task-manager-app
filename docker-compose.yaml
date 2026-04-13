@@ -15,6 +15,9 @@ services:
       - LOGGER_LEVEL=${LOGGER_LEVEL}
       - LOGGER_FOLDER=/app/out/logs
       - TIME_ZONE=${TIME_ZONE}
+    depends_on:
+      notesapp-postgres:
+        condition: service_healthy
     volumes:
       - ./out/logs:/app/out/logs
     ports:
@@ -30,6 +33,11 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - ${PROJECT_ROOT}/out/pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   notesapp-postgres-migrate:
