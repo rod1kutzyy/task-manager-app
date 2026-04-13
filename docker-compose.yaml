@@ -1,8 +1,8 @@
 services:
   notesapp:
     build:
-      context: ${PROJECT_ROOT}
-      dockerfile: ${PROJECT_ROOT}/cmd/notesapp/Dockerfile
+      context: .
+      dockerfile: ./cmd/notesapp/Dockerfile
     container_name: notesapp
     environment:
       - HTTP_ADDR=:5050
@@ -16,7 +16,7 @@ services:
       - LOGGER_FOLDER=/app/out/logs
       - TIME_ZONE=${TIME_ZONE}
     volumes:
-      - ${PROJECT_ROOT}/out/logs:/app/out/logs
+      - ./out/logs:/app/out/logs
     ports:
       - "5050:5050"
     restart: unless-stopped
