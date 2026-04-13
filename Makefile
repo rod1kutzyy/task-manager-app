@@ -68,3 +68,12 @@ app-run:
 		export POSTGRES_HOST=localhost && \
 		go mod tidy && \
 		go run ${PROJECT_ROOT}/cmd/notesapp/main.go
+
+app-deploy:
+	@docker compose up -d --build notesapp
+
+app-undeploy:
+	@docker compose down notesapp
+
+ps:
+	@docker compose ps
