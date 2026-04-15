@@ -1,0 +1,22 @@
+package web_fs_repository
+
+import (
+	"errors"
+	"fmt"
+	"os"
+
+	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
+)
+
+func (r *repository) GetFile(filePath string) ([]byte, error) {
+	file, err := os.ReadFile(filePath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, fmt.Errorf("file: %s: %w", file, core_errors.ErrNotFound)
+		}
+
+		return nil, fmt.Errorf("get file: %s: %w", filePath, err)
+	}
+
+	return file, nil
+}
