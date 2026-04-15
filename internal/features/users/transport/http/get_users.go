@@ -11,6 +11,17 @@ import (
 
 type getUsersResponse []userDTOResponse
 
+// GetUsers godoc
+// @Summary List users
+// @Description Returns users with optional pagination via limit and offset.
+// @Tags users
+// @Produce json
+// @Param limit query int false "Page size"
+// @Param offset query int false "Page offset"
+// @Success 200 {array} userDTOResponse "Users list"
+// @Failure 400 {object} response.ErrorResponse "Bad request"
+// @Failure 500 {object} response.ErrorResponse "Internal server error"
+// @Router /users [get]
 func (h *handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger := core_logger.FromContext(ctx)

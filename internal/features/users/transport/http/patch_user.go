@@ -13,10 +13,28 @@ import (
 )
 
 type patchUserRequest struct {
-	FullName    http_types.Nullable[string] `json:"full_name"`
-	PhoneNumber http_types.Nullable[string] `json:"phone_number"`
+	FullName    http_types.Nullable[string] `json:"full_name" swaggertype:"string" example:"Ivan Ivanov"`
+	PhoneNumber http_types.Nullable[string] `json:"phone_number" swaggertype:"string" example:"+79998887766"`
 }
 
+// PatchUser godoc
+// @Summary Partially update a user
+// @Description Updates user fields using three-state semantics for each field.
+// @Description 1. Field is omitted: the value is not changed.
+// @Description 2. Field has a value: the value is updated.
+// @Description 3. Field is explicitly null: the value is cleared (set to NULL).
+// @Description Constraint: `full_name` cannot be set to null.
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param request body patchUserRequest true "User patch payload"
+// @Success 200 {object} patchUserResponse "Updated user"
+// @Failure 400 {object} response.ErrorResponse "Bad request"
+// @Failure 404 {object} response.ErrorResponse "User not found"
+// @Failure 409 {object} response.ErrorResponse "Conflict"
+// @Failure 500 {object} response.ErrorResponse "Internal server error"
+// @Router /users/{id} [patch]
 func (r *patchUserRequest) Validate() error {
 	if r.FullName.Set {
 		if r.FullName.Value == nil {

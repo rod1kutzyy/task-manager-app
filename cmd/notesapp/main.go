@@ -22,8 +22,15 @@ import (
 	users_service "github.com/rod1kutzyy/task-manager-app/internal/features/users/service"
 	users_transport_http "github.com/rod1kutzyy/task-manager-app/internal/features/users/transport/http"
 	"go.uber.org/zap"
+
+	_ "github.com/rod1kutzyy/task-manager-app/docs"
 )
 
+// @title Notes app API
+// @version 1.0
+// @description REST API for managing users, tasks, and task statistics.
+// @host 127.0.0.1:5050
+// @BasePath /api/v1
 func main() {
 	cfg := core_config.NewConfigMust()
 
@@ -66,6 +73,7 @@ func main() {
 	httpServer := server.NewHTTPServer(
 		server.NewConfigMust(),
 		logger,
+		middleware.CORS(),
 		middleware.RequestID(),
 		middleware.Logger(logger),
 		middleware.Trace(),
@@ -79,6 +87,8 @@ func main() {
 	apiVersionRouter.RegisterRoutes(statisticsTransportHTTP.Routes()...)
 
 	httpServer.RegisterAPIRouters(apiVersionRouter)
+
+	httpServer.RegisterSwagger()
 
 	if err := httpServer.Run(ctx); err != nil {
 		logger.Error("HTTP server run error", zap.Error(err))
