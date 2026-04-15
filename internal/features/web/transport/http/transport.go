@@ -10,6 +10,7 @@ type handler struct {
 
 type WebService interface {
 	GetMainPage() ([]byte, error)
+	GetAsset(assetPath string) ([]byte, error)
 }
 
 func NewHandler(webService WebService) *handler {
@@ -21,8 +22,14 @@ func NewHandler(webService WebService) *handler {
 func (h *handler) Routes() []server.Route {
 	return []server.Route{
 		{
-			Path:    "/",
+			Method:  "GET",
+			Path:    "/{$}",
 			Handler: h.GetMainPage,
+		},
+		{
+			Method:  "GET",
+			Path:    "/assets/{filepath...}",
+			Handler: h.GetAsset,
 		},
 	}
 }
