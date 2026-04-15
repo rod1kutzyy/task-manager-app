@@ -21,6 +21,9 @@ import (
 	users_postgres_repository "github.com/rod1kutzyy/task-manager-app/internal/features/users/repository/postgres"
 	users_service "github.com/rod1kutzyy/task-manager-app/internal/features/users/service"
 	users_transport_http "github.com/rod1kutzyy/task-manager-app/internal/features/users/transport/http"
+	web_fs_repository "github.com/rod1kutzyy/task-manager-app/internal/features/web/repository/file_system"
+	web_service "github.com/rod1kutzyy/task-manager-app/internal/features/web/service"
+	web_transport_http "github.com/rod1kutzyy/task-manager-app/internal/features/web/transport/http"
 	"go.uber.org/zap"
 
 	_ "github.com/rod1kutzyy/task-manager-app/docs"
@@ -69,6 +72,11 @@ func main() {
 	statisticsService := statistics_service.NewService(statisticsRepository)
 	statisticsTransportHTTP := statistics_transport_http.NewHandler(statisticsService)
 
+	logger.Debug("initializing feature", zap.String("feature", "web"))
+	webRepository := web_fs_repository.NewRepository()
+	webService := web_service.NewService(webRepository)
+	webTransportHTTP := web_transport_http.NewHandler(webService)
+
 	logger.Debug("initializing HTTP server")
 	httpServer := server.NewHTTPServer(
 		server.NewConfigMust(),
@@ -87,7 +95,7 @@ func main() {
 	apiVersionRouter.RegisterRoutes(statisticsTransportHTTP.Routes()...)
 
 	httpServer.RegisterAPIRouters(apiVersionRouter)
-
+	httpServer.RegisterRoutes(webTransportHTTP.Routes()...)
 	httpServer.RegisterSwagger()
 
 	if err := httpServer.Run(ctx); err != nil {
