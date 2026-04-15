@@ -75,5 +75,13 @@ app-deploy:
 app-undeploy:
 	@docker compose down notesapp
 
+swagger-gen:
+	@docker compose run --rm swagger \
+		init \
+		-g cmd/notesapp/main.go \
+		-o docs \
+		--parseInternal \
+		--parseDependency
+
 ps:
 	@docker compose ps

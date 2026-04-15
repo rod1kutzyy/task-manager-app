@@ -12,10 +12,10 @@ import (
 )
 
 type getStatisticsResponse struct {
-	TasksCreated      int      `json:"tasks_created"`
-	TasksCompleted    int      `json:"tasks_completed"`
-	CompletedRate     *float64 `json:"completed_rate"`
-	AvgCompletionTime *string  `json:"avg_completion_time"`
+	TasksCreated      int      `json:"tasks_created" example:"50"`
+	TasksCompleted    int      `json:"tasks_completed" example:"10"`
+	CompletedRate     *float64 `json:"completed_rate" example:"20"`
+	AvgCompletionTime *string  `json:"avg_completion_time" example:"1m30s"`
 }
 
 func toDTOFromDomain(statistics domain.Statistics) getStatisticsResponse {
@@ -33,6 +33,18 @@ func toDTOFromDomain(statistics domain.Statistics) getStatisticsResponse {
 	}
 }
 
+// GetStatistics godoc
+// @Summary Get task statistics
+// @Description Returns task statistics with optional filtering by `user_id` and/or date range.
+// @Tags statistics
+// @Produce json
+// @Param user_id query int false "Filter statistics by user ID"
+// @Param from query string false "Start date (inclusive), format: YYYY-MM-DD"
+// @Param to query string false "End date (exclusive), format: YYYY-MM-DD"
+// @Success 200 {object} getStatisticsResponse "Statistics response"
+// @Failure 400 {object} response.ErrorResponse "Bad request"
+// @Failure 500 {object} response.ErrorResponse "Internal server error"
+// @Router /statistics [get]
 func (h *handler) GetStatistics(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger := core_logger.FromContext(ctx)

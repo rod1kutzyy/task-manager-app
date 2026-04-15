@@ -8,6 +8,16 @@ import (
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/response"
 )
 
+// DeleteUser godoc
+// @Summary Delete a user
+// @Description Deletes a user by numeric identifier.
+// @Tags users
+// @Param id path int true "User ID"
+// @Success 204 "User deleted"
+// @Failure 400 {object} response.ErrorResponse "Bad request"
+// @Failure 404 {object} response.ErrorResponse "User not found"
+// @Failure 500 {object} response.ErrorResponse "Internal server error"
+// @Router /users/{id} [delete]
 func (h *handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger := core_logger.FromContext(ctx)

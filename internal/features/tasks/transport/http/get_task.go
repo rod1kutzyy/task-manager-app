@@ -10,6 +10,17 @@ import (
 
 type getTaskResponse taskDTOResponse
 
+// GetTask godoc
+// @Summary Get a task by ID
+// @Description Returns a single task by numeric identifier.
+// @Tags tasks
+// @Produce json
+// @Param id path int true "Task ID"
+// @Success 200 {object} getTaskResponse "Task found"
+// @Failure 400 {object} response.ErrorResponse "Bad request"
+// @Failure 404 {object} response.ErrorResponse "Task not found"
+// @Failure 500 {object} response.ErrorResponse "Internal server error"
+// @Router /tasks/{id} [get]
 func (h *handler) GetTask(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger := core_logger.FromContext(ctx)

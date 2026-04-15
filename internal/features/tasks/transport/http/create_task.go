@@ -10,13 +10,25 @@ import (
 )
 
 type createTaskRequest struct {
-	Title        string  `json:"title" validate:"required,min=1,max=100"`
-	Description  *string `json:"description" validate:"omitempty,min=1,max=1000"`
-	AuthorUserID int     `json:"author_user_id" validate:"required"`
+	Title        string  `json:"title" validate:"required,min=1,max=100" example:"Walk the dog"`
+	Description  *string `json:"description" validate:"omitempty,min=1,max=1000" example:"Morning walk at 06:30"`
+	AuthorUserID int     `json:"author_user_id" validate:"required" example:"10"`
 }
 
 type createTaskResponse taskDTOResponse
 
+// CreateTask godoc
+// @Summary Create a task
+// @Description Creates a new task in the system.
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Param request body createTaskRequest true "Task creation payload"
+// @Success 201 {object} createTaskResponse "Created task"
+// @Failure 400 {object} response.ErrorResponse "Bad request"
+// @Failure 404 {object} response.ErrorResponse "Author not found"
+// @Failure 500 {object} response.ErrorResponse "Internal server error"
+// @Router /tasks [post]
 func (h *handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger := core_logger.FromContext(ctx)
