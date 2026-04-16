@@ -1,6 +1,8 @@
 package domain
 
+import "github.com/google/uuid"
+
 var (
-	UninitializedID      = -1
+	UninitializedID      = uuid.Nil
 	UninitializedVersion = -1
 )

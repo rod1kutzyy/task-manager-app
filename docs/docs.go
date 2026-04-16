@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/statistics": {
             "get": {
-                "description": "Returns task statistics with optional filtering by ` + "`" + `user_id` + "`" + ` and/or date range.",
+                "description": "Returns task statistics with optional filtering by ` + "`" + `user_id` + "`" + ` (UUID) and/or date range.",
                 "produces": [
                     "application/json"
                 ],
@@ -27,8 +27,9 @@ const docTemplate = `{
                 "summary": "Get task statistics",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Filter statistics by user ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Filter statistics by user ID (UUID)",
                         "name": "user_id",
                         "in": "query"
                     },
@@ -69,7 +70,7 @@ const docTemplate = `{
         },
         "/tasks": {
             "get": {
-                "description": "Returns tasks with optional filtering by ` + "`" + `user_id` + "`" + ` and optional pagination.",
+                "description": "Returns tasks with optional filtering by ` + "`" + `user_id` + "`" + ` (UUID) and optional pagination.",
                 "produces": [
                     "application/json"
                 ],
@@ -79,8 +80,9 @@ const docTemplate = `{
                 "summary": "List tasks",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Filter tasks by author user ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Filter tasks by author user ID (UUID)",
                         "name": "user_id",
                         "in": "query"
                     },
@@ -174,7 +176,7 @@ const docTemplate = `{
         },
         "/tasks/{id}": {
             "get": {
-                "description": "Returns a single task by numeric identifier.",
+                "description": "Returns a single task by UUID identifier.",
                 "produces": [
                     "application/json"
                 ],
@@ -184,8 +186,9 @@ const docTemplate = `{
                 "summary": "Get a task by ID",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Task ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Task ID (UUID)",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -219,15 +222,16 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Deletes a task by numeric identifier.",
+                "description": "Deletes a task by UUID identifier.",
                 "tags": [
                     "tasks"
                 ],
                 "summary": "Delete a task",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Task ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Task ID (UUID)",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -271,8 +275,9 @@ const docTemplate = `{
                 "summary": "Partially update a task",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Task ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Task ID (UUID)",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -416,7 +421,7 @@ const docTemplate = `{
         },
         "/users/{id}": {
             "get": {
-                "description": "Returns a single user by numeric identifier.",
+                "description": "Returns a single user by UUID identifier.",
                 "produces": [
                     "application/json"
                 ],
@@ -426,8 +431,9 @@ const docTemplate = `{
                 "summary": "Get a user by ID",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "User ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "User ID (UUID)",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -461,15 +467,16 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Deletes a user by numeric identifier.",
+                "description": "Deletes a user by UUID identifier.",
                 "tags": [
                     "users"
                 ],
                 "summary": "Delete a user",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "User ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "User ID (UUID)",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -513,8 +520,9 @@ const docTemplate = `{
                 "summary": "Partially update a user",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "User ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "User ID (UUID)",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -607,8 +615,8 @@ const docTemplate = `{
             ],
             "properties": {
                 "author_user_id": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "string",
+                    "example": "279ee73e-0132-4d5e-9498-cfe6fb43742c"
                 },
                 "description": {
                     "type": "string",
@@ -628,8 +636,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "author_user_id": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "string",
+                    "example": "279ee73e-0132-4d5e-9498-cfe6fb43742c"
                 },
                 "completed": {
                     "type": "boolean",
@@ -648,8 +656,8 @@ const docTemplate = `{
                     "example": "Morning walk at 06:30"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 101
+                    "type": "string",
+                    "example": "b5fc5eb1-65b6-4a28-ac34-612fd14cd39c"
                 },
                 "title": {
                     "type": "string",
@@ -665,8 +673,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "author_user_id": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "string",
+                    "example": "279ee73e-0132-4d5e-9498-cfe6fb43742c"
                 },
                 "completed": {
                     "type": "boolean",
@@ -685,8 +693,8 @@ const docTemplate = `{
                     "example": "Morning walk at 06:30"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 101
+                    "type": "string",
+                    "example": "b5fc5eb1-65b6-4a28-ac34-612fd14cd39c"
                 },
                 "title": {
                     "type": "string",
@@ -719,8 +727,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "author_user_id": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "string",
+                    "example": "279ee73e-0132-4d5e-9498-cfe6fb43742c"
                 },
                 "completed": {
                     "type": "boolean",
@@ -739,8 +747,8 @@ const docTemplate = `{
                     "example": "Morning walk at 06:30"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 101
+                    "type": "string",
+                    "example": "b5fc5eb1-65b6-4a28-ac34-612fd14cd39c"
                 },
                 "title": {
                     "type": "string",
@@ -756,8 +764,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "author_user_id": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "string",
+                    "example": "279ee73e-0132-4d5e-9498-cfe6fb43742c"
                 },
                 "completed": {
                     "type": "boolean",
@@ -776,8 +784,8 @@ const docTemplate = `{
                     "example": "Morning walk at 06:30"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 101
+                    "type": "string",
+                    "example": "b5fc5eb1-65b6-4a28-ac34-612fd14cd39c"
                 },
                 "title": {
                     "type": "string",
@@ -817,8 +825,8 @@ const docTemplate = `{
                     "example": "Ivan Ivanov"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "string",
+                    "example": "279ee73e-0132-4d5e-9498-cfe6fb43742c"
                 },
                 "phone_number": {
                     "type": "string",
@@ -838,8 +846,8 @@ const docTemplate = `{
                     "example": "Ivan Ivanov"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "string",
+                    "example": "279ee73e-0132-4d5e-9498-cfe6fb43742c"
                 },
                 "phone_number": {
                     "type": "string",
@@ -872,8 +880,8 @@ const docTemplate = `{
                     "example": "Ivan Ivanov"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "string",
+                    "example": "279ee73e-0132-4d5e-9498-cfe6fb43742c"
                 },
                 "phone_number": {
                     "type": "string",
@@ -893,8 +901,8 @@ const docTemplate = `{
                     "example": "Ivan Ivanov"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "string",
+                    "example": "279ee73e-0132-4d5e-9498-cfe6fb43742c"
                 },
                 "phone_number": {
                     "type": "string",

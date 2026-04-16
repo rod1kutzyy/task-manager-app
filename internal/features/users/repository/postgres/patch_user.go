@@ -5,12 +5,13 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
 	core_postgres_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool"
 )
 
-func (r *repository) PatchUser(ctx context.Context, id int, user domain.User) (domain.User, error) {
+func (r *repository) PatchUser(ctx context.Context, id uuid.UUID, user domain.User) (domain.User, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
 	defer cancel()
 
@@ -19,7 +20,7 @@ func (r *repository) PatchUser(ctx context.Context, id int, user domain.User) (d
 	SET
 		full_name = $1,
 		phone_number = $2,
-		version = version+1
+		version = version + 1
 	WHERE id = $3 AND version = $4
 	RETURNING id, version, full_name, phone_number;
 	`
@@ -36,7 +37,7 @@ func (r *repository) PatchUser(ctx context.Context, id int, user domain.User) (d
 	if err != nil {
 		if errors.Is(err, core_postgres_pool.ErrNoRows) {
 			return domain.User{}, fmt.Errorf(
-				"user with id='%d' concurrently accessed: %w",
+				"user with id='%s' concurrently accessed: %w",
 				id, core_errors.ErrConflict,
 			)
 		}

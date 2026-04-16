@@ -14,7 +14,7 @@ func (r *repository) GetUsers(ctx context.Context, limit *int, offset *int) ([]d
 	query := `
 	SELECT id, version, full_name, phone_number
 	FROM notesapp.users
-	ORDER BY id
+	ORDER BY id ASC
 	LIMIT $1
 	OFFSET $2;
 	`

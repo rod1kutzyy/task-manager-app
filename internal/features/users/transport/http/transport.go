@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/server"
 )
@@ -15,9 +16,9 @@ type handler struct {
 type UsersService interface {
 	CreateUser(ctx context.Context, user domain.User) (domain.User, error)
 	GetUsers(ctx context.Context, limit *int, offset *int) ([]domain.User, error)
-	GetUser(ctx context.Context, id int) (domain.User, error)
-	DeleteUser(ctx context.Context, id int) error
-	PatchUser(ctx context.Context, id int, patch domain.UserPatch) (domain.User, error)
+	GetUser(ctx context.Context, id uuid.UUID) (domain.User, error)
+	DeleteUser(ctx context.Context, id uuid.UUID) error
+	PatchUser(ctx context.Context, id uuid.UUID, patch domain.UserPatch) (domain.User, error)
 }
 
 func NewHandler(usersService UsersService) *handler {

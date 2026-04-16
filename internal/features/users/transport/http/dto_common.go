@@ -1,12 +1,15 @@
 package users_transport_http
 
-import "github.com/rod1kutzyy/task-manager-app/internal/core/domain"
+import (
+	"github.com/google/uuid"
+	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
+)
 
 type userDTOResponse struct {
-	ID          int     `json:"id" example:"10"`
-	Version     int     `json:"version" example:"3"`
-	FullName    string  `json:"full_name" example:"Ivan Ivanov"`
-	PhoneNumber *string `json:"phone_number" example:"+79998887766"`
+	ID          uuid.UUID `json:"id" example:"279ee73e-0132-4d5e-9498-cfe6fb43742c"`
+	Version     int       `json:"version" example:"3"`
+	FullName    string    `json:"full_name" example:"Ivan Ivanov"`
+	PhoneNumber *string   `json:"phone_number" example:"+79998887766"`
 }
 
 func userDTOFromDomain(user domain.User) userDTOResponse {

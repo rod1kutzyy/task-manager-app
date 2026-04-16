@@ -5,12 +5,13 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
 	core_postgres_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool"
 )
 
-func (r *repository) GetUser(ctx context.Context, id int) (domain.User, error) {
+func (r *repository) GetUser(ctx context.Context, id uuid.UUID) (domain.User, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
 	defer cancel()
 
@@ -32,7 +33,7 @@ func (r *repository) GetUser(ctx context.Context, id int) (domain.User, error) {
 	if err != nil {
 		if errors.Is(err, core_postgres_pool.ErrNoRows) {
 			return domain.User{}, fmt.Errorf(
-				"user with id='%d': %w",
+				"user with id='%s': %w",
 				id, core_errors.ErrNotFound,
 			)
 		}

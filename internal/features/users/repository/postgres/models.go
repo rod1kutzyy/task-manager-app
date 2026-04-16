@@ -1,12 +1,15 @@
 package users_postgres_repository
 
-import "github.com/rod1kutzyy/task-manager-app/internal/core/domain"
+import (
+	"github.com/google/uuid"
+	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
+)
 
 type UserModel struct {
-	ID          int     `db:"id"`
-	Version     int     `db:"version"`
-	FullName    string  `db:"full_name"`
-	PhoneNumber *string `db:"phone_number"`
+	ID          uuid.UUID `db:"id"`
+	Version     int       `db:"version"`
+	FullName    string    `db:"full_name"`
+	PhoneNumber *string   `db:"phone_number"`
 }
 
 func userDomainsFromModels(users []UserModel) []domain.User {

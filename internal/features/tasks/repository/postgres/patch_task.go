@@ -5,24 +5,25 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
 	core_postgres_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool"
 )
 
-func (r *repository) PatchTask(ctx context.Context, id int, task domain.Task) (domain.Task, error) {
+func (r *repository) PatchTask(ctx context.Context, id uuid.UUID, task domain.Task) (domain.Task, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
 	defer cancel()
 
 	query := `
 	UPDATE notesapp.tasks
 	SET
-		title=$1,
-		description=$2,
-		completed=$3,
-		completed_at=$4,
-		version=version + 1
-	WHERE id=$5 AND version=$6
+		title = $1,
+		description = $2,
+		completed = $3,
+		completed_at = $4,
+		version = version + 1
+	WHERE id = $5 AND version = $6
 	RETURNING id, version, title, description, completed, created_at, completed_at, author_user_id;
 	`
 
@@ -50,7 +51,7 @@ func (r *repository) PatchTask(ctx context.Context, id int, task domain.Task) (d
 	if err != nil {
 		if errors.Is(err, core_postgres_pool.ErrNoRows) {
 			return domain.Task{}, fmt.Errorf(
-				"task with id='%d' concurrently accessed: %w",
+				"task with id='%s' concurrently accessed: %w",
 				id, core_errors.ErrConflict,
 			)
 		}

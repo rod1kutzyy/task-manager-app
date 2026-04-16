@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/google/uuid"
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
 )
 
@@ -43,4 +44,21 @@ func GetDateQueryParam(r *http.Request, key string) (*time.Time, error) {
 	}
 
 	return &date, nil
+}
+
+func GetUUIDQueryParam(r *http.Request, key string) (*uuid.UUID, error) {
+	param := r.URL.Query().Get(key)
+	if param == "" {
+		return nil, nil
+	}
+
+	val, err := uuid.Parse(param)
+	if err != nil {
+		return nil, fmt.Errorf(
+			"param='%s' by key='%s' not a valid UUID: %v: %w",
+			param, key, err, core_errors.ErrInvalidArgument,
+		)
+	}
+
+	return &val, nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/google/uuid"
 	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/request"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/response"
@@ -13,10 +14,10 @@ type getTasksResponse []taskDTOResponse
 
 // GetTasks godoc
 // @Summary List tasks
-// @Description Returns tasks with optional filtering by `user_id` and optional pagination.
+// @Description Returns tasks with optional filtering by `user_id` (UUID) and optional pagination.
 // @Tags tasks
 // @Produce json
-// @Param user_id query int false "Filter tasks by author user ID"
+// @Param user_id query string false "Filter tasks by author user ID (UUID)" Format(uuid)
 // @Param limit query int false "Page size"
 // @Param offset query int false "Page offset"
 // @Success 200 {array} taskDTOResponse "Tasks list"
@@ -45,14 +46,14 @@ func (h *handler) GetTasks(w http.ResponseWriter, r *http.Request) {
 	respHandler.JSONResponse(resp, http.StatusOK)
 }
 
-func getUserIDLimitOffsetQueryParams(r *http.Request) (*int, *int, *int, error) {
+func getUserIDLimitOffsetQueryParams(r *http.Request) (*uuid.UUID, *int, *int, error) {
 	const (
 		userIDQueryParamKey = "user_id"
 		limitQueryParamKey  = "limit"
 		offsetQueryParamKey = "offset"
 	)
 
-	userID, err := request.GetIntQueryParam(r, userIDQueryParamKey)
+	userID, err := request.GetUUIDQueryParam(r, userIDQueryParamKey)
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("get 'user_id' query param: %w", err)
 	}

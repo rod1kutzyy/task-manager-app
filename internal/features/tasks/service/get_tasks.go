@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
 )
 
-func (s *service) GetTasks(ctx context.Context, userID *int, limit *int, offset *int) ([]domain.Task, error) {
+func (s *service) GetTasks(ctx context.Context, userID *uuid.UUID, limit *int, offset *int) ([]domain.Task, error) {
 	if limit != nil && *limit < 0 {
 		return nil, fmt.Errorf("limit must be non-negative: %w", core_errors.ErrInvalidArgument)
 	}

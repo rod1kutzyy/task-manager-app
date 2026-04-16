@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
 )
 
-func (s *service) GetStatistics(ctx context.Context, userID *int, from *time.Time, to *time.Time) (domain.Statistics, error) {
+func (s *service) GetStatistics(ctx context.Context, userID *uuid.UUID, from *time.Time, to *time.Time) (domain.Statistics, error) {
 	if from != nil && to != nil {
 		if to.Before(*from) || to.Equal(*from) {
 			return domain.Statistics{}, fmt.Errorf("`to` must be after `from`: %w", core_errors.ErrInvalidArgument)

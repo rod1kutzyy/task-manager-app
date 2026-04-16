@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 )
 
@@ -12,7 +13,7 @@ type service struct {
 }
 
 type StatisticsRepository interface {
-	GetTasks(ctx context.Context, userID *int, from *time.Time, to *time.Time) ([]domain.Task, error)
+	GetTasks(ctx context.Context, userID *uuid.UUID, from *time.Time, to *time.Time) ([]domain.Task, error)
 }
 
 func NewService(statisticsRepository StatisticsRepository) *service {
