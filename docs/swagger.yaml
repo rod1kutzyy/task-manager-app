@@ -27,8 +27,8 @@ definitions:
   internal_features_tasks_transport_http.createTaskRequest:
     properties:
       author_user_id:
-        example: 10
-        type: integer
+        example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
+        type: string
       description:
         example: Morning walk at 06:30
         maxLength: 1000
@@ -46,8 +46,8 @@ definitions:
   internal_features_tasks_transport_http.createTaskResponse:
     properties:
       author_user_id:
-        example: 10
-        type: integer
+        example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
+        type: string
       completed:
         example: true
         type: boolean
@@ -61,8 +61,8 @@ definitions:
         example: Morning walk at 06:30
         type: string
       id:
-        example: 101
-        type: integer
+        example: b5fc5eb1-65b6-4a28-ac34-612fd14cd39c
+        type: string
       title:
         example: Walk the dog
         type: string
@@ -73,8 +73,8 @@ definitions:
   internal_features_tasks_transport_http.getTaskResponse:
     properties:
       author_user_id:
-        example: 10
-        type: integer
+        example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
+        type: string
       completed:
         example: true
         type: boolean
@@ -88,8 +88,8 @@ definitions:
         example: Morning walk at 06:30
         type: string
       id:
-        example: 101
-        type: integer
+        example: b5fc5eb1-65b6-4a28-ac34-612fd14cd39c
+        type: string
       title:
         example: Walk the dog
         type: string
@@ -112,8 +112,8 @@ definitions:
   internal_features_tasks_transport_http.patchTaskResponse:
     properties:
       author_user_id:
-        example: 10
-        type: integer
+        example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
+        type: string
       completed:
         example: true
         type: boolean
@@ -127,8 +127,8 @@ definitions:
         example: Morning walk at 06:30
         type: string
       id:
-        example: 101
-        type: integer
+        example: b5fc5eb1-65b6-4a28-ac34-612fd14cd39c
+        type: string
       title:
         example: Walk the dog
         type: string
@@ -139,8 +139,8 @@ definitions:
   internal_features_tasks_transport_http.taskDTOResponse:
     properties:
       author_user_id:
-        example: 10
-        type: integer
+        example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
+        type: string
       completed:
         example: true
         type: boolean
@@ -154,8 +154,8 @@ definitions:
         example: Morning walk at 06:30
         type: string
       id:
-        example: 101
-        type: integer
+        example: b5fc5eb1-65b6-4a28-ac34-612fd14cd39c
+        type: string
       title:
         example: Walk the dog
         type: string
@@ -184,8 +184,8 @@ definitions:
         example: Ivan Ivanov
         type: string
       id:
-        example: 10
-        type: integer
+        example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
+        type: string
       phone_number:
         example: "+79998887766"
         type: string
@@ -199,8 +199,8 @@ definitions:
         example: Ivan Ivanov
         type: string
       id:
-        example: 10
-        type: integer
+        example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
+        type: string
       phone_number:
         example: "+79998887766"
         type: string
@@ -223,8 +223,8 @@ definitions:
         example: Ivan Ivanov
         type: string
       id:
-        example: 10
-        type: integer
+        example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
+        type: string
       phone_number:
         example: "+79998887766"
         type: string
@@ -238,8 +238,8 @@ definitions:
         example: Ivan Ivanov
         type: string
       id:
-        example: 10
-        type: integer
+        example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
+        type: string
       phone_number:
         example: "+79998887766"
         type: string
@@ -256,13 +256,14 @@ info:
 paths:
   /statistics:
     get:
-      description: Returns task statistics with optional filtering by `user_id` and/or
-        date range.
+      description: Returns task statistics with optional filtering by `user_id` (UUID)
+        and/or date range.
       parameters:
-      - description: Filter statistics by user ID
+      - description: Filter statistics by user ID (UUID)
+        format: uuid
         in: query
         name: user_id
-        type: integer
+        type: string
       - description: 'Start date (inclusive), format: YYYY-MM-DD'
         in: query
         name: from
@@ -291,13 +292,14 @@ paths:
       - statistics
   /tasks:
     get:
-      description: Returns tasks with optional filtering by `user_id` and optional
+      description: Returns tasks with optional filtering by `user_id` (UUID) and optional
         pagination.
       parameters:
-      - description: Filter tasks by author user ID
+      - description: Filter tasks by author user ID (UUID)
+        format: uuid
         in: query
         name: user_id
-        type: integer
+        type: string
       - description: Page size
         in: query
         name: limit
@@ -361,13 +363,14 @@ paths:
       - tasks
   /tasks/{id}:
     delete:
-      description: Deletes a task by numeric identifier.
+      description: Deletes a task by UUID identifier.
       parameters:
-      - description: Task ID
+      - description: Task ID (UUID)
+        format: uuid
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       responses:
         "204":
           description: Task deleted
@@ -387,13 +390,14 @@ paths:
       tags:
       - tasks
     get:
-      description: Returns a single task by numeric identifier.
+      description: Returns a single task by UUID identifier.
       parameters:
-      - description: Task ID
+      - description: Task ID (UUID)
+        format: uuid
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -426,11 +430,12 @@ paths:
         3. Field is explicitly null: the value is cleared (set to NULL).
         Constraints: `title` and `completed` cannot be set to null.
       parameters:
-      - description: Task ID
+      - description: Task ID (UUID)
+        format: uuid
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Task patch payload
         in: body
         name: request
@@ -526,13 +531,14 @@ paths:
       - users
   /users/{id}:
     delete:
-      description: Deletes a user by numeric identifier.
+      description: Deletes a user by UUID identifier.
       parameters:
-      - description: User ID
+      - description: User ID (UUID)
+        format: uuid
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       responses:
         "204":
           description: User deleted
@@ -552,13 +558,14 @@ paths:
       tags:
       - users
     get:
-      description: Returns a single user by numeric identifier.
+      description: Returns a single user by UUID identifier.
       parameters:
-      - description: User ID
+      - description: User ID (UUID)
+        format: uuid
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -591,11 +598,12 @@ paths:
         3. Field is explicitly null: the value is cleared (set to NULL).
         Constraint: `full_name` cannot be set to null.
       parameters:
-      - description: User ID
+      - description: User ID (UUID)
+        format: uuid
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: User patch payload
         in: body
         name: request

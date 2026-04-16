@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/server"
 )
@@ -14,7 +15,7 @@ type handler struct {
 }
 
 type StatisticsService interface {
-	GetStatistics(ctx context.Context, userID *int, from *time.Time, to *time.Time) (domain.Statistics, error)
+	GetStatistics(ctx context.Context, userID *uuid.UUID, from *time.Time, to *time.Time) (domain.Statistics, error)
 }
 
 func NewHandler(statisticsService StatisticsService) *handler {

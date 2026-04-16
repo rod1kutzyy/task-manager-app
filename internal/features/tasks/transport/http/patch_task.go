@@ -59,7 +59,7 @@ type patchTaskResponse taskDTOResponse
 // @Tags tasks
 // @Accept json
 // @Produce json
-// @Param id path int true "Task ID"
+// @Param id path string true "Task ID (UUID)" Format(uuid)
 // @Param request body patchTaskRequest true "Task patch payload"
 // @Success 200 {object} patchTaskResponse "Updated task"
 // @Failure 400 {object} response.ErrorResponse "Bad request"
@@ -72,7 +72,7 @@ func (h *handler) PatchTask(w http.ResponseWriter, r *http.Request) {
 	logger := core_logger.FromContext(ctx)
 	respHandler := response.NewHTTPResponseHandler(w, logger)
 
-	taskID, err := request.GetIntPathValue(r, "id")
+	taskID, err := request.GetUUIDPathValue(r, "id")
 	if err != nil {
 		respHandler.ErrorResponse(err, "failed to get taskID path value")
 		return

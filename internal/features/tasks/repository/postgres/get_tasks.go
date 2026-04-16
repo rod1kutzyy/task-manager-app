@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 )
 
-func (r *repository) GetTasks(ctx context.Context, userID *int, limit *int, offset *int) ([]domain.Task, error) {
+func (r *repository) GetTasks(ctx context.Context, userID *uuid.UUID, limit *int, offset *int) ([]domain.Task, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
 	defer cancel()
 
@@ -15,7 +16,7 @@ func (r *repository) GetTasks(ctx context.Context, userID *int, limit *int, offs
 	SELECT id, version, title, description, completed, created_at, completed_at, author_user_id
 	FROM notesapp.tasks
 	%s
-	ORDER BY id
+	ORDER BY created_at DESC, id ASC
 	LIMIT $1
 	OFFSET $2;
 	`
@@ -23,7 +24,7 @@ func (r *repository) GetTasks(ctx context.Context, userID *int, limit *int, offs
 	args := []any{limit, offset}
 
 	if userID != nil {
-		query = fmt.Sprintf(query, "WHERE author_user_id=$3")
+		query = fmt.Sprintf(query, "WHERE author_user_id = $3")
 		args = append(args, userID)
 	} else {
 		query = fmt.Sprintf(query, "")

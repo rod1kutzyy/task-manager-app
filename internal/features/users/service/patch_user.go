@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 )
 
-func (s *service) PatchUser(ctx context.Context, id int, patch domain.UserPatch) (domain.User, error) {
+func (s *service) PatchUser(ctx context.Context, id uuid.UUID, patch domain.UserPatch) (domain.User, error) {
 	user, err := s.usersRepository.GetUser(ctx, id)
 	if err != nil {
 		return domain.User{}, fmt.Errorf("get user: %w", err)

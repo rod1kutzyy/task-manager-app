@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/request"
@@ -35,10 +36,10 @@ func toDTOFromDomain(statistics domain.Statistics) getStatisticsResponse {
 
 // GetStatistics godoc
 // @Summary Get task statistics
-// @Description Returns task statistics with optional filtering by `user_id` and/or date range.
+// @Description Returns task statistics with optional filtering by `user_id` (UUID) and/or date range.
 // @Tags statistics
 // @Produce json
-// @Param user_id query int false "Filter statistics by user ID"
+// @Param user_id query string false "Filter statistics by user ID (UUID)" Format(uuid)
 // @Param from query string false "Start date (inclusive), format: YYYY-MM-DD"
 // @Param to query string false "End date (exclusive), format: YYYY-MM-DD"
 // @Success 200 {object} getStatisticsResponse "Statistics response"
@@ -67,14 +68,14 @@ func (h *handler) GetStatistics(w http.ResponseWriter, r *http.Request) {
 	respHandler.JSONResponse(resp, http.StatusOK)
 }
 
-func getUserIDFromToQueryParams(r *http.Request) (*int, *time.Time, *time.Time, error) {
+func getUserIDFromToQueryParams(r *http.Request) (*uuid.UUID, *time.Time, *time.Time, error) {
 	const (
 		userIDQueryParamKey = "user_id"
 		fromQueryParamKey   = "from"
 		toQueryParamKey     = "to"
 	)
 
-	userID, err := request.GetIntQueryParam(r, userIDQueryParamKey)
+	userID, err := request.GetUUIDQueryParam(r, userIDQueryParamKey)
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("get 'user_id' query param: %w", err)
 	}

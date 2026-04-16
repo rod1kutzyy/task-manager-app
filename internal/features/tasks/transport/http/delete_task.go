@@ -10,9 +10,9 @@ import (
 
 // DeleteTask godoc
 // @Summary Delete a task
-// @Description Deletes a task by numeric identifier.
+// @Description Deletes a task by UUID identifier.
 // @Tags tasks
-// @Param id path int true "Task ID"
+// @Param id path string true "Task ID (UUID)" Format(uuid)
 // @Success 204 "Task deleted"
 // @Failure 400 {object} response.ErrorResponse "Bad request"
 // @Failure 404 {object} response.ErrorResponse "Task not found"
@@ -23,7 +23,7 @@ func (h *handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	logger := core_logger.FromContext(ctx)
 	respHandler := response.NewHTTPResponseHandler(w, logger)
 
-	taskID, err := request.GetIntPathValue(r, "id")
+	taskID, err := request.GetUUIDPathValue(r, "id")
 	if err != nil {
 		respHandler.ErrorResponse(err, "failed to get taskID path value")
 		return

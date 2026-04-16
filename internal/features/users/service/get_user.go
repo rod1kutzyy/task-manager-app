@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 )
 
-func (s *service) GetUser(ctx context.Context, id int) (domain.User, error) {
+func (s *service) GetUser(ctx context.Context, id uuid.UUID) (domain.User, error) {
 	user, err := s.usersRepository.GetUser(ctx, id)
 	if err != nil {
 		return domain.User{}, fmt.Errorf("get user from repository: %w", err)

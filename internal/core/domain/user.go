@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/google/uuid"
 	core_errors "github.com/rod1kutzyy/task-manager-app/internal/core/errors"
 )
 
 type User struct {
-	ID      int
+	ID      uuid.UUID
 	Version int
 
 	FullName    string
 	PhoneNumber *string
 }
 
-func NewUser(id int, version int, fullName string, phoneNumber *string) User {
+func NewUser(id uuid.UUID, version int, fullName string, phoneNumber *string) User {
 	return User{
 		ID:          id,
 		Version:     version,

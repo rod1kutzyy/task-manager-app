@@ -12,10 +12,10 @@ type getUserResponse userDTOResponse
 
 // GetUser godoc
 // @Summary Get a user by ID
-// @Description Returns a single user by numeric identifier.
+// @Description Returns a single user by UUID identifier.
 // @Tags users
 // @Produce json
-// @Param id path int true "User ID"
+// @Param id path string true "User ID (UUID)" Format(uuid)
 // @Success 200 {object} getUserResponse "User found"
 // @Failure 400 {object} response.ErrorResponse "Bad request"
 // @Failure 404 {object} response.ErrorResponse "User not found"
@@ -26,7 +26,7 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	logger := core_logger.FromContext(ctx)
 	respHandler := response.NewHTTPResponseHandler(w, logger)
 
-	userID, err := request.GetIntPathValue(r, "id")
+	userID, err := request.GetUUIDPathValue(r, "id")
 	if err != nil {
 		respHandler.ErrorResponse(err, "failed to get userID path value")
 		return

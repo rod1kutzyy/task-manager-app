@@ -10,6 +10,13 @@ let _justDoneId = null; // task id that just got completed — to animate only t
 
 const _cddState = {}; // id -> { value, search }
 
+// Вспомогательная функция для сокращения UUID в интерфейсе
+const shortId = (id) => {
+  if (!id) return "";
+  const s = String(id);
+  return s.includes("-") ? s.split("-")[0] : s;
+};
+
 function cddToggle(id) {
   const el = document.getElementById(id);
   const isOpen = el.classList.contains("open");
@@ -93,7 +100,9 @@ function cddRenderList(id) {
 
   const filtered = _usersCache.filter(
     (u) =>
-      !q || u.full_name.toLowerCase().includes(q) || String(u.id).includes(q),
+      !q ||
+      u.full_name.toLowerCase().includes(q) ||
+      String(u.id).toLowerCase().includes(q),
   );
 
   if (filtered.length === 0 && q) {
@@ -109,8 +118,7 @@ function cddRenderList(id) {
                 <span class="cdd-avatar" style="background:${grad}">${esc(initials)}</span>
                 <span class="cdd-opt-text">
                     <span class="cdd-opt-name">${esc(u.full_name)}</span>
-                    <span class="cdd-opt-sub">ID: ${u.id}</span>
-                </span>
+                    </span>
                 <svg class="cdd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>`);
   });
@@ -465,9 +473,8 @@ function renderTasks(tasks) {
 function taskCard(t) {
   const done = t.completed;
   const author = _usersCache.find((u) => u.id === t.author_user_id);
-  const authorLabel = author
-    ? `${esc(author.full_name)}<span class="chip-uid">ID: ${t.author_user_id}</span>`
-    : `Unknown<span class="chip-uid">ID: ${t.author_user_id}</span>`;
+  const authorLabel = author ? esc(author.full_name) : "Unknown";
+
   const duration =
     done && t.completed_at && t.created_at
       ? fmtDuration(t.created_at, t.completed_at)
@@ -475,6 +482,7 @@ function taskCard(t) {
   const completedDate =
     done && t.completed_at ? fmtDateTime(t.completed_at) : "";
   const pendingAge = !done && t.created_at ? fmtAge(t.created_at) : "";
+
   return `
     <div class="task-card ${done ? "is-done" : ""}" data-id="${t.id}">
         <button class="task-toggle ${done ? "done" : ""}"
@@ -513,8 +521,7 @@ function taskCard(t) {
                 </span>`
                     : ""
                 }
-                <span class="chip chip-version">v${t.version}</span>
-            </div>
+                </div>
         </div>
         <div class="task-actions">
             <button class="btn-icon" onclick="editTask('${t.id}')" title="Edit">
@@ -629,16 +636,13 @@ async function submitTask() {
       toast(e.message, "error");
     }
   } else {
-    const authorIdRaw = document.getElementById("task-author-id").value.trim();
-    if (!authorIdRaw) {
+    const authorId = document.getElementById("task-author-id").value.trim();
+    if (!authorId) {
       toast("Author User ID is required", "error");
       return;
     }
-    const authorId = Number(authorIdRaw);
-    if (!Number.isInteger(authorId) || authorId <= 0) {
-      toast("Author User ID must be a positive integer", "error");
-      return;
-    }
+
+    // Удалены проверки Number.isInteger, так как теперь мы используем UUID (строку)
     const body = { title, author_user_id: authorId };
     if (desc) body.description = desc;
     try {
@@ -719,10 +723,6 @@ function userCard(u) {
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6 6l.87-1.14a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.46 16"/>
             </svg>
             ${u.phone_number ? esc(u.phone_number) : '<em style="opacity:.5">No phone</em>'}
-        </div>
-        <div class="user-chips">
-            <span class="chip">ID: ${u.id}</span>
-            <span class="chip chip-version">v${u.version}</span>
         </div>
         <div class="user-card-footer">
             <button class="btn btn-secondary btn-sm" onclick="editUser('${u.id}')">
@@ -814,8 +814,10 @@ async function submitUser() {
 
 function confirmDelete(e, type, id) {
   if (e) e.stopPropagation();
-  document.getElementById("confirm-text").textContent =
-    `Are you sure you want to delete ${type === "task" ? "task" : "user"} #${id}? This action cannot be undone.`;
+  
+  document.getElementById("confirm-text").innerHTML =
+    `Are you sure you want to delete ${type === "task" ? "task" : "user"}?<br>This action cannot be undone.`;
+    
   document.getElementById("confirm-ok-btn").onclick = async () => {
     try {
       await api(`/${type}s/${id}`, { method: "DELETE" });

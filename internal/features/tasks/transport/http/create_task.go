@@ -3,6 +3,7 @@ package tasks_transport_http
 import (
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/request"
@@ -10,9 +11,9 @@ import (
 )
 
 type createTaskRequest struct {
-	Title        string  `json:"title" validate:"required,min=1,max=100" example:"Walk the dog"`
-	Description  *string `json:"description" validate:"omitempty,min=1,max=1000" example:"Morning walk at 06:30"`
-	AuthorUserID int     `json:"author_user_id" validate:"required" example:"10"`
+	Title        string    `json:"title" validate:"required,min=1,max=100" example:"Walk the dog"`
+	Description  *string   `json:"description" validate:"omitempty,min=1,max=1000" example:"Morning walk at 06:30"`
+	AuthorUserID uuid.UUID `json:"author_user_id" validate:"required" example:"279ee73e-0132-4d5e-9498-cfe6fb43742c"`
 }
 
 type createTaskResponse taskDTOResponse

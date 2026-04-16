@@ -6,10 +6,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 )
 
-func (r *repository) GetTasks(ctx context.Context, userID *int, from *time.Time, to *time.Time) ([]domain.Task, error) {
+func (r *repository) GetTasks(ctx context.Context, userID *uuid.UUID, from *time.Time, to *time.Time) ([]domain.Task, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
 	defer cancel()
 
@@ -24,17 +25,17 @@ func (r *repository) GetTasks(ctx context.Context, userID *int, from *time.Time,
 	conditions := []string{}
 
 	if userID != nil {
-		conditions = append(conditions, fmt.Sprintf("author_user_id=$%d", len(args)+1))
+		conditions = append(conditions, fmt.Sprintf("author_user_id = $%d", len(args)+1))
 		args = append(args, userID)
 	}
 
 	if from != nil {
-		conditions = append(conditions, fmt.Sprintf("created_at>=$%d", len(args)+1))
+		conditions = append(conditions, fmt.Sprintf("created_at >= $%d", len(args)+1))
 		args = append(args, from)
 	}
 
 	if to != nil {
-		conditions = append(conditions, fmt.Sprintf("created_at<$%d", len(args)+1))
+		conditions = append(conditions, fmt.Sprintf("created_at < $%d", len(args)+1))
 		args = append(args, to)
 	}
 
@@ -42,7 +43,7 @@ func (r *repository) GetTasks(ctx context.Context, userID *int, from *time.Time,
 		queryBuilder.WriteString(" WHERE " + strings.Join(conditions, " AND "))
 	}
 
-	queryBuilder.WriteString(" ORDER BY id;")
+	queryBuilder.WriteString(" ORDER BY created_at DESC, id ASC;")
 
 	rows, err := r.pool.Query(ctx, queryBuilder.String(), args...)
 	if err != nil {
