@@ -1,4 +1,4 @@
-package tasks_postgres_repository
+package tasks_adapters_out_repository_postgres
 
 import (
 	"time"
@@ -18,25 +18,15 @@ type TaskModel struct {
 	AuthorUserID uuid.UUID  `db:"author_user_id"`
 }
 
-func taskDomainFromModel(taskModel TaskModel) domain.Task {
+func modelToDomain(model TaskModel) domain.Task {
 	return domain.NewTask(
-		taskModel.ID,
-		taskModel.Version,
-		taskModel.Title,
-		taskModel.Description,
-		taskModel.Completed,
-		taskModel.CreatedAt,
-		taskModel.CompletedAt,
-		taskModel.AuthorUserID,
+		model.ID,
+		model.Version,
+		model.Title,
+		model.Description,
+		model.Completed,
+		model.CreatedAt,
+		model.CompletedAt,
+		model.AuthorUserID,
 	)
-}
-
-func taskDomainsFromModels(tasks []TaskModel) []domain.Task {
-	tasksDomain := make([]domain.Task, len(tasks))
-
-	for i, task := range tasks {
-		tasksDomain[i] = taskDomainFromModel(task)
-	}
-
-	return tasksDomain
 }

@@ -1,13 +1,13 @@
-package tasks_transport_http
+package tasks_adapters_in_transport_http
 
 import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 	core_logger "github.com/rod1kutzyy/task-manager-app/internal/core/logger"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/request"
 	"github.com/rod1kutzyy/task-manager-app/internal/core/transport/http/response"
+	tasks_ports_in "github.com/rod1kutzyy/task-manager-app/internal/features/tasks/ports/in"
 )
 
 type createTaskRequest struct {
@@ -41,15 +41,18 @@ func (h *handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	taskDomain := domain.NewTaskUninitialized(req.Title, req.Description, req.AuthorUserID)
-
-	taskDomain, err := h.tasksService.CreateTask(ctx, taskDomain)
+	serviceParams := tasks_ports_in.NewCreateTaskParams(
+		req.Title,
+		req.Description,
+		req.AuthorUserID,
+	)
+	serviceResult, err := h.tasksService.CreateTask(ctx, serviceParams)
 	if err != nil {
 		respHandler.ErrorResponse(err, "failed to create task")
 		return
 	}
 
-	resp := createTaskResponse(taskDTOFromDomain(taskDomain))
+	resp := createTaskResponse(taskDTOFromDomain(serviceResult.Task))
 
 	respHandler.JSONResponse(resp, http.StatusCreated)
 }

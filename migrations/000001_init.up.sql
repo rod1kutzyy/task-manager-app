@@ -10,7 +10,7 @@ CREATE TABLE notesapp.users (
 );
 
 CREATE TABLE notesapp.tasks (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     version BIGINT NOT NULL DEFAULT 1,
     title VARCHAR(100) NOT NULL CHECK(char_length(title) BETWEEN 1 AND 100),
     description VARCHAR(1000) CHECK(char_length(description) BETWEEN 1 AND 1000),

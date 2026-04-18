@@ -1,4 +1,4 @@
-package tasks_transport_http
+package tasks_adapters_in_transport_http
 
 import (
 	"time"

@@ -1,6 +1,8 @@
-package tasks_postgres_repository
+package tasks_adapters_out_repository_postgres
 
-import core_postgres_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool"
+import (
+	core_postgres_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool"
+)
 
 type repository struct {
 	pool core_postgres_pool.Pool
