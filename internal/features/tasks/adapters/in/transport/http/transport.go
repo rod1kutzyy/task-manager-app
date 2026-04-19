@@ -24,5 +24,10 @@ func (h *handler) Routes() []server.Route {
 			Path:    "/tasks",
 			Handler: h.CreateTask,
 		},
+		{
+			Method:  http.MethodGet,
+			Path:    "/tasks/{id}",
+			Handler: h.GetTask,
+		},
 	}
 }

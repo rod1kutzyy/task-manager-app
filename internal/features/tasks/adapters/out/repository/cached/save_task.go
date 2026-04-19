@@ -8,17 +8,17 @@ import (
 
 func (r *cachedRepository) SaveTask(
 	ctx context.Context,
-	params tasks_ports_out_repository.SaveTaskParams,
+	in tasks_ports_out_repository.SaveTaskParams,
 ) (tasks_ports_out_repository.SaveTaskResult, error) {
-	repoSaveTaskResult, err := r.mainRepository.SaveTask(ctx, params)
+	mainRepoResult, err := r.mainRepository.SaveTask(ctx, in)
 	if err != nil {
 		return tasks_ports_out_repository.SaveTaskResult{}, err
 	}
 
-	task := repoSaveTaskResult.Task
+	task := mainRepoResult.Task
 
 	r.cacheTask(ctx, task)
 	r.invalidateTask(ctx, task.AuthorUserID, nil)
 
-	return repoSaveTaskResult, nil
+	return mainRepoResult, nil
 }

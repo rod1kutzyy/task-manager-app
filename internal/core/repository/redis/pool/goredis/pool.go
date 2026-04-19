@@ -33,6 +33,12 @@ func NewPool(ctx context.Context, cfg Config) (*Pool, error) {
 	}, nil
 }
 
+func (p *Pool) Get(ctx context.Context, key string) core_redis_pool.StringCmd {
+	cmd := p.client.Get(ctx, key)
+
+	return goredisStringCmd{cmd}
+}
+
 func (p *Pool) Set(ctx context.Context, key string, value any, ttl time.Duration) core_redis_pool.StatusCmd {
 	cmd := p.client.Set(ctx, key, value, ttl)
 

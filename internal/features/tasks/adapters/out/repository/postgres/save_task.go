@@ -12,7 +12,7 @@ import (
 
 func (r *repository) SaveTask(
 	ctx context.Context,
-	params tasks_ports_out_repository.SaveTaskParams,
+	in tasks_ports_out_repository.SaveTaskParams,
 ) (tasks_ports_out_repository.SaveTaskResult, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
 	defer cancel()
@@ -23,7 +23,7 @@ func (r *repository) SaveTask(
 	RETURNING id, version, title, description, completed, created_at, completed_at, author_user_id;
 	`
 
-	task := params.Task
+	task := in.Task
 	row := r.pool.QueryRow(
 		ctx,
 		query,

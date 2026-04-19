@@ -29,6 +29,14 @@ func (m *TaskModel) Serialize() ([]byte, error) {
 	return bytes, nil
 }
 
+func (m *TaskModel) Deserialize(bytes []byte) error {
+	if err := json.Unmarshal(bytes, m); err != nil {
+		return fmt.Errorf("deserialize tasK: %w", err)
+	}
+
+	return nil
+}
+
 func domainToModel(task domain.Task) TaskModel {
 	return TaskModel{
 		ID:           task.ID,
@@ -40,6 +48,19 @@ func domainToModel(task domain.Task) TaskModel {
 		CompletedAt:  task.CompletedAt,
 		AuthorUserID: task.AuthorUserID,
 	}
+}
+
+func modelToDomain(model TaskModel) domain.Task {
+	return domain.NewTask(
+		model.ID,
+		model.Version,
+		model.Title,
+		model.Description,
+		model.Completed,
+		model.CreatedAt,
+		model.CompletedAt,
+		model.AuthorUserID,
+	)
 }
 
 func taskKey(id uuid.UUID) string {
