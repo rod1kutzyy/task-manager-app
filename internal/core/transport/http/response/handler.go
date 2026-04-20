@@ -84,7 +84,7 @@ func (h *HTTPResponseHandler) ErrorResponse(err error, msg string) {
 
 	logFunc(msg, zap.Error(err))
 
-	h.errorResponse(statusCode, err, msg)
+	h.errorResponse(statusCode, msg)
 }
 
 func (h *HTTPResponseHandler) PanicResponse(p any, msg string) {
@@ -93,14 +93,27 @@ func (h *HTTPResponseHandler) PanicResponse(p any, msg string) {
 
 	h.logger.Error(msg, zap.Error(err))
 
-	h.errorResponse(statusCode, err, msg)
+	h.errorResponse(statusCode, msg)
 }
 
-func (h HTTPResponseHandler) errorResponse(statusCode int, err error, msg string) {
+func (h HTTPResponseHandler) errorResponse(statusCode int, msg string) {
 	resp := ErrorResponse{
-		Error:   err.Error(),
+		Error:   publicError(statusCode),
 		Message: msg,
 	}
 
 	h.JSONResponse(resp, statusCode)
+}
+
+func publicError(statusCode int) string {
+	switch statusCode {
+	case http.StatusBadRequest:
+		return "invalid argument"
+	case http.StatusNotFound:
+		return "not found"
+	case http.StatusConflict:
+		return "conflict"
+	default:
+		return "internal server error"
+	}
 }

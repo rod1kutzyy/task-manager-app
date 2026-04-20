@@ -3,7 +3,7 @@ definitions:
   github_com_rod1kutzyy_task-manager-app_internal_core_transport_http_response.ErrorResponse:
     properties:
       error:
-        example: error text
+        example: internal server error
         type: string
       message:
         example: human-readable message
