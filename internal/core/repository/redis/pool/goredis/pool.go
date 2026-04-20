@@ -51,6 +51,18 @@ func (p *Pool) Del(ctx context.Context, keys ...string) core_redis_pool.IntCmd {
 	return goredisIntCmd{cmd}
 }
 
+func (p *Pool) HGet(ctx context.Context, key string, field string) core_redis_pool.StringCmd {
+	cmd := p.client.HGet(ctx, key, field)
+
+	return goredisStringCmd{cmd}
+}
+
+func (p *Pool) HSet(ctx context.Context, key string, values ...any) core_redis_pool.IntCmd {
+	cmd := p.client.HSet(ctx, key, values...)
+
+	return goredisIntCmd{cmd}
+}
+
 func (p *Pool) Close() error {
 	return p.client.Close()
 }

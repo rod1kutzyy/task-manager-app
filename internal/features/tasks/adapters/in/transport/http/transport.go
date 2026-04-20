@@ -30,6 +30,11 @@ func (h *handler) Routes() []server.Route {
 			Handler: h.GetTask,
 		},
 		{
+			Method:  http.MethodGet,
+			Path:    "/tasks",
+			Handler: h.GetTasks,
+		},
+		{
 			Method:  http.MethodDelete,
 			Path:    "/tasks/{id}",
 			Handler: h.DeleteTask,

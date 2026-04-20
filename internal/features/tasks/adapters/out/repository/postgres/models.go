@@ -30,3 +30,13 @@ func modelToDomain(model TaskModel) domain.Task {
 		model.AuthorUserID,
 	)
 }
+
+func modelsToDomains(models []TaskModel) []domain.Task {
+	domains := make([]domain.Task, len(models))
+
+	for i, model := range models {
+		domains[i] = modelToDomain(model)
+	}
+
+	return domains
+}
