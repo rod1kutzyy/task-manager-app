@@ -24,6 +24,10 @@ func (r *cachedRepository) DeleteTask(
 		task = mainRepoGetTaskResult.Task
 	}
 
+	if _, err := r.mainRepository.DeleteTask(ctx, in); err != nil {
+		return tasks_ports_out_repository.DeleteTaskResult{}, err
+	}
+
 	r.invalidateTask(ctx, task.AuthorUserID, &in.ID)
 
 	return tasks_ports_out_repository.NewDeleteTaskResult(), nil
