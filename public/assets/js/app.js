@@ -638,7 +638,7 @@ async function submitTask() {
   } else {
     const authorId = document.getElementById("task-author-id").value.trim();
     if (!authorId) {
-      toast("Author User ID is required", "error");
+      toast("Author is required", "error");
       return;
     }
 

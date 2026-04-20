@@ -43,6 +43,27 @@ func NewTask(
 	}
 }
 
+func CreateTask(title string, description *string, authorUserID uuid.UUID) Task {
+	var (
+		id                     = uuid.New()
+		version                = 1
+		completed              = false
+		createdAt              = time.Now()
+		completedAt *time.Time = nil
+	)
+
+	return NewTask(
+		id,
+		version,
+		title,
+		description,
+		completed,
+		createdAt,
+		completedAt,
+		authorUserID,
+	)
+}
+
 func NewTaskUninitialized(title string, description *string, authorUserID uuid.UUID) Task {
 	return NewTask(
 		UninitializedID,

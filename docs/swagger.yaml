@@ -3,7 +3,7 @@ definitions:
   github_com_rod1kutzyy_task-manager-app_internal_core_transport_http_response.ErrorResponse:
     properties:
       error:
-        example: error text
+        example: internal server error
         type: string
       message:
         example: human-readable message
@@ -24,7 +24,7 @@ definitions:
         example: 50
         type: integer
     type: object
-  internal_features_tasks_transport_http.createTaskRequest:
+  internal_features_tasks_adapters_in_transport_http.createTaskRequest:
     properties:
       author_user_id:
         example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
@@ -43,7 +43,7 @@ definitions:
     - author_user_id
     - title
     type: object
-  internal_features_tasks_transport_http.createTaskResponse:
+  internal_features_tasks_adapters_in_transport_http.createTaskResponse:
     properties:
       author_user_id:
         example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
@@ -70,7 +70,7 @@ definitions:
         example: 2
         type: integer
     type: object
-  internal_features_tasks_transport_http.getTaskResponse:
+  internal_features_tasks_adapters_in_transport_http.getTaskResponse:
     properties:
       author_user_id:
         example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
@@ -97,7 +97,7 @@ definitions:
         example: 2
         type: integer
     type: object
-  internal_features_tasks_transport_http.patchTaskRequest:
+  internal_features_tasks_adapters_in_transport_http.patchTaskRequest:
     properties:
       completed:
         example: true
@@ -109,7 +109,7 @@ definitions:
         example: Walk the dog
         type: string
     type: object
-  internal_features_tasks_transport_http.patchTaskResponse:
+  internal_features_tasks_adapters_in_transport_http.patchTaskResponse:
     properties:
       author_user_id:
         example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
@@ -136,7 +136,7 @@ definitions:
         example: 2
         type: integer
     type: object
-  internal_features_tasks_transport_http.taskDTOResponse:
+  internal_features_tasks_adapters_in_transport_http.taskDTOResponse:
     properties:
       author_user_id:
         example: 279ee73e-0132-4d5e-9498-cfe6fb43742c
@@ -315,7 +315,7 @@ paths:
           description: Tasks list
           schema:
             items:
-              $ref: '#/definitions/internal_features_tasks_transport_http.taskDTOResponse'
+              $ref: '#/definitions/internal_features_tasks_adapters_in_transport_http.taskDTOResponse'
             type: array
         "400":
           description: Bad request
@@ -338,14 +338,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/internal_features_tasks_transport_http.createTaskRequest'
+          $ref: '#/definitions/internal_features_tasks_adapters_in_transport_http.createTaskRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created task
           schema:
-            $ref: '#/definitions/internal_features_tasks_transport_http.createTaskResponse'
+            $ref: '#/definitions/internal_features_tasks_adapters_in_transport_http.createTaskResponse'
         "400":
           description: Bad request
           schema:
@@ -404,7 +404,7 @@ paths:
         "200":
           description: Task found
           schema:
-            $ref: '#/definitions/internal_features_tasks_transport_http.getTaskResponse'
+            $ref: '#/definitions/internal_features_tasks_adapters_in_transport_http.getTaskResponse'
         "400":
           description: Bad request
           schema:
@@ -441,14 +441,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/internal_features_tasks_transport_http.patchTaskRequest'
+          $ref: '#/definitions/internal_features_tasks_adapters_in_transport_http.patchTaskRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Updated task
           schema:
-            $ref: '#/definitions/internal_features_tasks_transport_http.patchTaskResponse'
+            $ref: '#/definitions/internal_features_tasks_adapters_in_transport_http.patchTaskResponse'
         "400":
           description: Bad request
           schema:

@@ -5,16 +5,17 @@ export PROJECT_ROOT=$(shell pwd)
 
 
 env-up:
-	@docker compose up -d notesapp-postgres
+	@docker compose up -d notesapp-postgres notesapp-redis
 
 env-down:
-	@docker compose down notesapp-postgres
+	@docker compose down notesapp-postgres notesapp-redis
 
 env-cleanup:
 	@read -p "Clear all volume files of the environment? The risk of data loss. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
-		docker compose down notesapp-postgres port-forwarder && \
+		docker compose down notesapp-postgres notesapp-redis port-forwarder && \
 		rm -rf ${PROJECT_ROOT}/out/pgdata && \
+		rm -rf ${PROJECT_ROOT}/out/redis_data && \
 		echo "The environment files are cleared"; \
 	else \
 		echo "Environment cleanup has been canceled"; \
@@ -66,6 +67,7 @@ logs-cleanup:
 app-run:
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
 		export POSTGRES_HOST=localhost && \
+		export REDIS_HOST=localhost && \
 		go mod tidy && \
 		go run ${PROJECT_ROOT}/cmd/notesapp/main.go
 
