@@ -19,7 +19,7 @@ func (r *cachedRepository) GetTask(
 		return tasks_ports_out_repository.GetTaskResult{}, err
 	}
 
-	r.cacheTask(ctx, mainRepoResult.Task)
+	_ = r.cacheTask(ctx, mainRepoResult.Task)
 
 	return mainRepoResult, nil
 }

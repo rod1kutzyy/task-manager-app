@@ -17,7 +17,7 @@ func (r *cachedRepository) SaveTask(
 
 	task := mainRepoResult.Task
 
-	r.cacheTask(ctx, task)
+	_ = r.cacheTask(ctx, task)
 	r.invalidateTask(ctx, task.AuthorUserID, nil)
 
 	return mainRepoResult, nil

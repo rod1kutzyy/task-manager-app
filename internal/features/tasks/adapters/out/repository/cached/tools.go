@@ -36,18 +36,22 @@ func (c *cachedRepository) getTaskFromCache(ctx context.Context, id uuid.UUID) (
 	return taskDomain, true
 }
 
-func (r *cachedRepository) cacheTask(ctx context.Context, task domain.Task) {
+func (r *cachedRepository) cacheTask(ctx context.Context, task domain.Task) bool {
 	logger := core_logger.FromContext(ctx)
 
 	taskModel := domainToModel(task)
 	bytes, err := taskModel.Serialize()
 	if err != nil {
 		logger.Error("serialize task", zap.Error(err))
+		return false
 	} else {
 		if err := r.pool.Set(ctx, taskKey(taskModel.ID), bytes, r.pool.TTL()).Err(); err != nil {
 			logger.Error("set task in cache", zap.Error(err))
+			return false
 		}
 	}
+
+	return true
 }
 
 func (r *cachedRepository) invalidateTask(ctx context.Context, userID uuid.UUID, taskID *uuid.UUID) {

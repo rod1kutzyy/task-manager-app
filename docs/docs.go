@@ -105,7 +105,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/internal_features_tasks_transport_http.taskDTOResponse"
+                                "$ref": "#/definitions/internal_features_tasks_adapters_in_transport_http.taskDTOResponse"
                             }
                         }
                     },
@@ -142,7 +142,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_features_tasks_transport_http.createTaskRequest"
+                            "$ref": "#/definitions/internal_features_tasks_adapters_in_transport_http.createTaskRequest"
                         }
                     }
                 ],
@@ -150,7 +150,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created task",
                         "schema": {
-                            "$ref": "#/definitions/internal_features_tasks_transport_http.createTaskResponse"
+                            "$ref": "#/definitions/internal_features_tasks_adapters_in_transport_http.createTaskResponse"
                         }
                     },
                     "400": {
@@ -198,7 +198,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Task found",
                         "schema": {
-                            "$ref": "#/definitions/internal_features_tasks_transport_http.getTaskResponse"
+                            "$ref": "#/definitions/internal_features_tasks_adapters_in_transport_http.getTaskResponse"
                         }
                     },
                     "400": {
@@ -288,7 +288,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_features_tasks_transport_http.patchTaskRequest"
+                            "$ref": "#/definitions/internal_features_tasks_adapters_in_transport_http.patchTaskRequest"
                         }
                     }
                 ],
@@ -296,7 +296,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Updated task",
                         "schema": {
-                            "$ref": "#/definitions/internal_features_tasks_transport_http.patchTaskResponse"
+                            "$ref": "#/definitions/internal_features_tasks_adapters_in_transport_http.patchTaskResponse"
                         }
                     },
                     "400": {
@@ -607,7 +607,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_features_tasks_transport_http.createTaskRequest": {
+        "internal_features_tasks_adapters_in_transport_http.createTaskRequest": {
             "type": "object",
             "required": [
                 "author_user_id",
@@ -632,7 +632,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_features_tasks_transport_http.createTaskResponse": {
+        "internal_features_tasks_adapters_in_transport_http.createTaskResponse": {
             "type": "object",
             "properties": {
                 "author_user_id": {
@@ -669,7 +669,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_features_tasks_transport_http.getTaskResponse": {
+        "internal_features_tasks_adapters_in_transport_http.getTaskResponse": {
             "type": "object",
             "properties": {
                 "author_user_id": {
@@ -706,7 +706,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_features_tasks_transport_http.patchTaskRequest": {
+        "internal_features_tasks_adapters_in_transport_http.patchTaskRequest": {
             "type": "object",
             "properties": {
                 "completed": {
@@ -723,7 +723,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_features_tasks_transport_http.patchTaskResponse": {
+        "internal_features_tasks_adapters_in_transport_http.patchTaskResponse": {
             "type": "object",
             "properties": {
                 "author_user_id": {
@@ -760,7 +760,7 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_features_tasks_transport_http.taskDTOResponse": {
+        "internal_features_tasks_adapters_in_transport_http.taskDTOResponse": {
             "type": "object",
             "properties": {
                 "author_user_id": {
