@@ -5,7 +5,7 @@ import "context"
 type TasksRepository interface {
 	SaveTask(ctx context.Context, in SaveTaskParams) (SaveTaskResult, error)
 	GetTask(ctx context.Context, in GetTaskParams) (GetTaskResult, error)
-	GetTasks(ctx context.Context, in GetTasksParams) (GetTasksResult, error)
+	ListTasks(ctx context.Context, in ListTasksParams) (ListTasksResult, error)
 	DeleteTask(ctx context.Context, in DeleteTaskParams) (DeleteTaskResult, error)
 	UpdateTask(ctx context.Context, in UpdateTaskParams) (UpdateTaskResult, error)
 }

@@ -10,10 +10,10 @@ import (
 	"go.uber.org/zap"
 )
 
-func (r *cachedRepository) GetTasks(
+func (r *cachedRepository) ListTasks(
 	ctx context.Context,
-	in tasks_ports_out_repository.GetTasksParams,
-) (tasks_ports_out_repository.GetTasksResult, error) {
+	in tasks_ports_out_repository.ListTasksParams,
+) (tasks_ports_out_repository.ListTasksResult, error) {
 	logger := core_logger.FromContext(ctx)
 
 	key := tasksListKey(in.UserID)
@@ -31,13 +31,13 @@ func (r *cachedRepository) GetTasks(
 		} else {
 			tasks := modelsToDomains(taskListModel)
 
-			return tasks_ports_out_repository.NewGetTasksResult(tasks), nil
+			return tasks_ports_out_repository.NewListTasksResult(tasks), nil
 		}
 	}
 
-	mainRepoResult, err := r.mainRepository.GetTasks(ctx, in)
+	mainRepoResult, err := r.mainRepository.ListTasks(ctx, in)
 	if err != nil {
-		return tasks_ports_out_repository.GetTasksResult{}, err
+		return tasks_ports_out_repository.ListTasksResult{}, err
 	}
 
 	taskListModel := domainsToModels(mainRepoResult.Tasks)

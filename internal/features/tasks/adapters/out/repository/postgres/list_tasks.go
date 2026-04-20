@@ -7,10 +7,10 @@ import (
 	tasks_ports_out_repository "github.com/rod1kutzyy/task-manager-app/internal/features/tasks/ports/out/repository"
 )
 
-func (r *repository) GetTasks(
+func (r *repository) ListTasks(
 	ctx context.Context,
-	in tasks_ports_out_repository.GetTasksParams,
-) (tasks_ports_out_repository.GetTasksResult, error) {
+	in tasks_ports_out_repository.ListTasksParams,
+) (tasks_ports_out_repository.ListTasksResult, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
 	defer cancel()
 
@@ -33,7 +33,7 @@ func (r *repository) GetTasks(
 
 	rows, err := r.pool.Query(ctx, query, args...)
 	if err != nil {
-		return tasks_ports_out_repository.GetTasksResult{}, fmt.Errorf("select tasks: %w", err)
+		return tasks_ports_out_repository.ListTasksResult{}, fmt.Errorf("select tasks: %w", err)
 	}
 	defer rows.Close()
 
@@ -52,17 +52,17 @@ func (r *repository) GetTasks(
 			&taskModel.AuthorUserID,
 		)
 		if err != nil {
-			return tasks_ports_out_repository.GetTasksResult{}, fmt.Errorf("scan task: %w", err)
+			return tasks_ports_out_repository.ListTasksResult{}, fmt.Errorf("scan task: %w", err)
 		}
 
 		taskModels = append(taskModels, taskModel)
 	}
 
 	if err := rows.Err(); err != nil {
-		return tasks_ports_out_repository.GetTasksResult{}, fmt.Errorf("new rows: %w", err)
+		return tasks_ports_out_repository.ListTasksResult{}, fmt.Errorf("new rows: %w", err)
 	}
 
 	taskDomains := modelsToDomains(taskModels)
 
-	return tasks_ports_out_repository.NewGetTasksResult(taskDomains), nil
+	return tasks_ports_out_repository.NewListTasksResult(taskDomains), nil
 }

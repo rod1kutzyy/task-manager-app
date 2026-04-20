@@ -13,7 +13,7 @@ import (
 
 type getTasksResponse []taskDTOResponse
 
-// GetTasks godoc
+// ListTasks godoc
 // @Summary List tasks
 // @Description Returns tasks with optional filtering by `user_id` (UUID) and optional pagination.
 // @Tags tasks
@@ -25,7 +25,7 @@ type getTasksResponse []taskDTOResponse
 // @Failure 400 {object} response.ErrorResponse "Bad request"
 // @Failure 500 {object} response.ErrorResponse "Internal server error"
 // @Router /tasks [get]
-func (h *handler) GetTasks(w http.ResponseWriter, r *http.Request) {
+func (h *handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger := core_logger.FromContext(ctx)
 	respHandler := response.NewHTTPResponseHandler(w, logger)
@@ -36,10 +36,10 @@ func (h *handler) GetTasks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	serviceParams := tasks_ports_in.NewGetTasksParams(userID, limit, offset)
-	serviceResult, err := h.tasksService.GetTasks(ctx, serviceParams)
+	serviceParams := tasks_ports_in.NewListTasksParams(userID, limit, offset)
+	serviceResult, err := h.tasksService.ListTasks(ctx, serviceParams)
 	if err != nil {
-		respHandler.ErrorResponse(err, "failed to get tasks")
+		respHandler.ErrorResponse(err, "failed to list tasks")
 		return
 	}
 

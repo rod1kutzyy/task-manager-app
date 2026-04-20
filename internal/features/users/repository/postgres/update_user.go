@@ -11,7 +11,7 @@ import (
 	core_postgres_pool "github.com/rod1kutzyy/task-manager-app/internal/core/repository/postgres/pool"
 )
 
-func (r *repository) PatchUser(ctx context.Context, id uuid.UUID, user domain.User) (domain.User, error) {
+func (r *repository) UpdateUser(ctx context.Context, id uuid.UUID, user domain.User) (domain.User, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
 	defer cancel()
 

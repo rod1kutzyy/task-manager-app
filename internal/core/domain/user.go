@@ -25,6 +25,15 @@ func NewUser(id uuid.UUID, version int, fullName string, phoneNumber *string) Us
 	}
 }
 
+func CreateUser(fullName string, phoneNumber *string) User {
+	return NewUser(
+		uuid.New(),
+		1,
+		fullName,
+		phoneNumber,
+	)
+}
+
 func NewUserUninitialized(fullName string, phoneNumber *string) User {
 	return NewUser(
 		UninitializedID,

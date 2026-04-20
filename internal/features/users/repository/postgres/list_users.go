@@ -7,7 +7,7 @@ import (
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 )
 
-func (r *repository) GetUsers(ctx context.Context, limit *int, offset *int) ([]domain.User, error) {
+func (r *repository) ListUsers(ctx context.Context, limit *int, offset *int) ([]domain.User, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
 	defer cancel()
 

@@ -8,11 +8,13 @@ import (
 )
 
 func (s *service) CreateUser(ctx context.Context, user domain.User) (domain.User, error) {
+	user = domain.CreateUser(user.FullName, user.PhoneNumber)
+
 	if err := user.Validate(); err != nil {
 		return domain.User{}, fmt.Errorf("validate user domain: %w", err)
 	}
 
-	user, err := s.usersRepository.CreateUser(ctx, user)
+	user, err := s.usersRepository.SaveUser(ctx, user)
 	if err != nil {
 		return domain.User{}, fmt.Errorf("create user: %w", err)
 	}

@@ -11,7 +11,7 @@ import (
 
 type getUsersResponse []userDTOResponse
 
-// GetUsers godoc
+// ListUsers godoc
 // @Summary List users
 // @Description Returns users with optional pagination via limit and offset.
 // @Tags users
@@ -22,7 +22,7 @@ type getUsersResponse []userDTOResponse
 // @Failure 400 {object} response.ErrorResponse "Bad request"
 // @Failure 500 {object} response.ErrorResponse "Internal server error"
 // @Router /users [get]
-func (h *handler) GetUsers(w http.ResponseWriter, r *http.Request) {
+func (h *handler) ListUsers(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger := core_logger.FromContext(ctx)
 	respHandler := response.NewHTTPResponseHandler(w, logger)
@@ -33,9 +33,9 @@ func (h *handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usersDomain, err := h.usersService.GetUsers(ctx, limit, offset)
+	usersDomain, err := h.usersService.ListUsers(ctx, limit, offset)
 	if err != nil {
-		respHandler.ErrorResponse(err, "failed to get users")
+		respHandler.ErrorResponse(err, "failed to list users")
 		return
 	}
 

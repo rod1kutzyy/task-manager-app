@@ -12,11 +12,11 @@ type service struct {
 }
 
 type UsersRepository interface {
-	CreateUser(ctx context.Context, user domain.User) (domain.User, error)
-	GetUsers(ctx context.Context, limit *int, offset *int) ([]domain.User, error)
+	SaveUser(ctx context.Context, user domain.User) (domain.User, error)
+	ListUsers(ctx context.Context, limit *int, offset *int) ([]domain.User, error)
 	GetUser(ctx context.Context, id uuid.UUID) (domain.User, error)
 	DeleteUser(ctx context.Context, id uuid.UUID) error
-	PatchUser(ctx context.Context, id uuid.UUID, user domain.User) (domain.User, error)
+	UpdateUser(ctx context.Context, id uuid.UUID, user domain.User) (domain.User, error)
 }
 
 func NewService(usersRepository UsersRepository) *service {

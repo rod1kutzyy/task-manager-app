@@ -15,7 +15,7 @@ type handler struct {
 
 type UsersService interface {
 	CreateUser(ctx context.Context, user domain.User) (domain.User, error)
-	GetUsers(ctx context.Context, limit *int, offset *int) ([]domain.User, error)
+	ListUsers(ctx context.Context, limit *int, offset *int) ([]domain.User, error)
 	GetUser(ctx context.Context, id uuid.UUID) (domain.User, error)
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	PatchUser(ctx context.Context, id uuid.UUID, patch domain.UserPatch) (domain.User, error)
@@ -37,7 +37,7 @@ func (h *handler) Routes() []server.Route {
 		{
 			Method:  http.MethodGet,
 			Path:    "/users",
-			Handler: h.GetUsers,
+			Handler: h.ListUsers,
 		},
 		{
 			Method:  http.MethodGet,

@@ -5,26 +5,26 @@ import (
 	"github.com/rod1kutzyy/task-manager-app/internal/core/domain"
 )
 
-type GetTasksParams struct {
+type ListTasksParams struct {
 	UserID *uuid.UUID
 	Limit  *int
 	Offset *int
 }
 
-func NewGetTasksParams(userID *uuid.UUID, limit *int, offset *int) GetTasksParams {
-	return GetTasksParams{
+func NewListTasksParams(userID *uuid.UUID, limit *int, offset *int) ListTasksParams {
+	return ListTasksParams{
 		UserID: userID,
 		Limit:  limit,
 		Offset: offset,
 	}
 }
 
-type GetTasksResult struct {
+type ListTasksResult struct {
 	Tasks []domain.Task
 }
 
-func NewGetTasksResult(tasks []domain.Task) GetTasksResult {
-	return GetTasksResult{
+func NewListTasksResult(tasks []domain.Task) ListTasksResult {
+	return ListTasksResult{
 		Tasks: tasks,
 	}
 }
