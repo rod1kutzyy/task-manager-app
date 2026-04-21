@@ -19,8 +19,6 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 COPY --from=builder /app/cmd/notesapp/exe /app
 
-COPY --from=builder /app/public /app/public
-
 RUN chown -R appuser:appgroup /app
 
 USER appuser
