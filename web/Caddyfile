@@ -1,0 +1,11 @@
+{$CADDY_HOST:localhost} {
+    @api path /api/*
+    reverse_proxy @api notesapp:5050
+
+    @swagger path /swagger /swagger/*
+    reverse_proxy @swagger notesapp:5050
+
+    root * /web/public
+    file_server
+}
+

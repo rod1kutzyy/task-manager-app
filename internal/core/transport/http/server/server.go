@@ -55,9 +55,12 @@ func (s *HTTPServer) RegisterSwagger() {
 	)
 
 	s.mux.HandleFunc("/swagger/doc.json", func(w http.ResponseWriter, r *http.Request) {
+		swaggerInfo := *docs.SwaggerInfo
+		swaggerInfo.Host = r.Host
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte(docs.SwaggerInfo.ReadDoc()))
+		_, _ = w.Write([]byte(swaggerInfo.ReadDoc()))
 	})
 }
 

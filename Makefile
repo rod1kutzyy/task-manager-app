@@ -1,7 +1,7 @@
 include .env
 export
 
-export PROJECT_ROOT=$(shell pwd)
+export PROJECT_ROOT=.
 
 
 env-up:
@@ -13,9 +13,10 @@ env-down:
 env-cleanup:
 	@read -p "Clear all volume files of the environment? The risk of data loss. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
-		docker compose down notesapp-postgres notesapp-redis port-forwarder && \
+		docker compose down notesapp-postgres notesapp-redis port-forwarder web-server && \
 		rm -rf ${PROJECT_ROOT}/out/pgdata && \
 		rm -rf ${PROJECT_ROOT}/out/redis_data && \
+		rm -rf ${PROJECT_ROOT}/out/caddy_data && \
 		echo "The environment files are cleared"; \
 	else \
 		echo "Environment cleanup has been canceled"; \
@@ -76,6 +77,12 @@ app-deploy:
 
 app-undeploy:
 	@docker compose down notesapp
+
+web-deploy:
+	@docker compose up -d web-server
+
+web-undeploy:
+	@docker compose down web-server
 
 swagger-gen:
 	@docker compose run --rm swagger \
