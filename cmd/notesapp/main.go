@@ -68,6 +68,7 @@ func main() {
 	usersTransportHTTP := users_transport_http.NewHandler(usersService)
 
 	logger.Debug("initializing feature", zap.String("feature", "tasks"))
+	// tasksRepository := tasks_adapters_out_repository_postgres.NewRepository(postgresPool)
 	tasksRepository := tasks_adapters_out_repository_cached.NewCachedRepository(
 		redisPool,
 		tasks_adapters_out_repository_postgres.NewRepository(postgresPool),

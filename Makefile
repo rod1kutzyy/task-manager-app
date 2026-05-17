@@ -94,3 +94,47 @@ swagger-gen:
 
 ps:
 	@docker compose ps
+
+load-test:
+	@go run scripts/load_test/main.go \
+		-users 10 \
+		-tasks-per-user 1000 \
+		-concurrency 100 \
+		-phase-duration 30s \
+		-read-burst 50 \
+		-mixed-reads 10 \
+		-mixed-writes 1 \
+		-report ${PROJECT_ROOT}/out/load_test/result.txt
+
+load-test-read-stress:
+	@go run scripts/load_test/main.go \
+		-users 10 \
+		-tasks-per-user 1000 \
+		-concurrency 200 \
+		-phase-duration 60s \
+		-read-burst 100 \
+		-mixed-reads 20 \
+		-mixed-writes 1 \
+		-report ${PROJECT_ROOT}/out/load_test/result_read_stress.txt
+
+load-test-mixed-stress:
+	@go run scripts/load_test/main.go \
+		-users 10 \
+		-tasks-per-user 1000 \
+		-concurrency 200 \
+		-phase-duration 60s \
+		-read-burst 50 \
+		-mixed-reads 10 \
+		-mixed-writes 5 \
+		-report ${PROJECT_ROOT}/out/load_test/result_mixed_stress.txt
+
+load-test-write-heavy:
+	@go run scripts/load_test/main.go \
+		-users 10 \
+		-tasks-per-user 1000 \
+		-concurrency 150 \
+		-phase-duration 60s \
+		-read-burst 20 \
+		-mixed-reads 5 \
+		-mixed-writes 10 \
+		-report ${PROJECT_ROOT}/out/load_test/result_write_heavy.txt
